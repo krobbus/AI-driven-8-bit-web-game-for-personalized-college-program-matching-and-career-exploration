@@ -1,0 +1,506 @@
+.dashboardContainer{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    padding: var(--space-xl);
+    margin: 0;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+
+    #mainTitle{
+        font-size: 3vmin;
+        text-wrap: wrap;
+        margin: 0;
+        text-align: left;
+        width: 100%;
+        max-width: 70vmin;
+        user-select: none;
+    }
+
+    .mainHeader{
+        font-size: 2.2vmin;
+        text-align: center;
+    }
+
+    .subHeader{
+        font-size: 1.8vmin;
+        text-align: left;
+        color: #fff;         
+    }
+
+    nav{
+        position: sticky; 
+        top: 2.3vmin;
+        left: 0;
+        border-radius: var(--radius-md);
+        background: var(--color-green-light);
+        z-index: 99;
+        transition: none;
+        width: 100%;
+        height: auto;
+        box-sizing: border-box;
+
+        ul{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li{
+                position: relative;
+                flex-shrink: 0;
+
+                a{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    gap: var(--space-md);
+                    height: 4.7vmin;
+                    padding: 0 var(--space-2xl);
+                    font-size: 1.4vmin;
+                    color: var(--color-green-dark);
+                    text-decoration: none;
+
+                    &:hover{
+                        color: #fff;
+                        background-color: var(--color-green-dark);
+                    }
+                }
+
+                ul{
+                    position: absolute;
+                    top: 100%;
+                    left: right;
+                    z-index: 120;
+                    background: #141414;
+                    box-shadow: 0 0.5vmin 0.9vmin rgba(0, 0, 0, 0.4);
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    flex-direction: column;
+                    max-height: 0;
+                    min-width: 20vmin;             
+                    opacity: 0;
+                    visibility: hidden;
+                    overflow: visible;
+                    transition: all 0.3s ease;
+
+                    a{  
+                        display: block;
+                        height: auto;
+                        padding: var(--space-sm) 1.7vmin;
+                        border-bottom: 0.2vmin dashed #333;
+                        background: var(--color-green-light);
+                        font-size: 1.4vmin;
+                        color: var(--color-green-dark);
+                        text-align: center;
+                    }
+                }
+
+                &:hover > ul, &.active > ul {
+                    opacity: 1;
+                    visibility: visible;
+                    max-height: 35vmin;
+                }
+            }
+
+            #home{ a{ color: #fff; }}
+            #logout{ a{ color: #ff4949; }}
+        }
+    }
+
+    .searchSection{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        form{
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            background: #fff;
+            border: 0.6vmin solid var(--color-green-light);
+            width: stretch;
+            box-sizing: border-box;
+
+            input{
+                font-family: "Jersey 10";
+                font-size: 2.3vmin;
+                border: 0;
+                outline: none;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            #searchBtn{
+                position: relative;
+                font-family: "Jersey 10";
+                font-size: 2.3vmin;
+                color: var(--color-green-main);
+                background-color: transparent;
+                border: none;
+                width: auto;
+                box-sizing: border-box;
+
+                &:hover{ color: var(--color-green-light); }
+            }
+        }
+
+        #backBtn{
+            font-family: "Jersey 10";
+            font-size: 2.3vmin;
+            color: var(--color-green-main);
+            background-color: #fff;
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+            padding: var(--space-md);
+            width: 23vmin;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #fff;
+                background-color: var(--color-green-light);
+                border: 0.5vmin solid #fff;
+            }
+        }
+    }
+
+    .loadingContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+
+        .loadingText{
+            font-size: 2.3vmin;
+            color: #fff;
+        }
+
+        button{
+            font-family: "Jersey 10";
+            font-size: 1.9vmin;
+            color: var(--color-green-main);
+            background-color: #fff;
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+            padding: var(--space-md);
+            width: 46vmin;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #fff;
+                background-color: var(--color-green-light);
+                border: 0.5vmin solid #fff;
+            }
+        }
+    }
+
+    main{
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+
+        .profileContainer{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: var(--space-md);
+            padding: 1.1vmin;
+            width: 100%;
+            box-sizing: border-box;
+
+            label.mainHeader{ grid-area: 1 / 1 / 2 / 5; }
+            .imgWrapper{ grid-area: 2 / 1 / 6 / 2; }
+            .idContainer{ grid-area: 2 / 2 / 3 / 5; }
+            .emailContainer{ grid-area: 3 / 2 / 4 / 5; }
+            .roleContainer{ grid-area: 4 / 2 / 5 / 5; }
+            .nameContainer{ grid-area: 5 / 2 / 6 / 5; }
+            .genderContainer { grid-area: 6 / 1 / 7 / 3; }
+            .pinContainer{ grid-area: 6 / 3 / 7 / 5; }
+            
+            .imgWrapper{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                border: 0.5vmin solid var(--color-green-light);
+                box-shadow: 1.2vmin 1.2vmin 0.8vmin rgba(0, 0, 0, 0.2);
+                border-top-left-radius: var(--radius-3xl);
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                box-sizing: border-box;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background-image: url("/assets/Background/AvatarBg.jpg");
+                    background-position: center;
+                    background-size: cover;
+                    background-repeat: no-repeat;       
+                    filter: brightness(0.8) blur(0.2vmin) grayscale(20%); 
+                    z-index: 1;
+                }
+
+                img{
+                    height: 23vmin;
+                    width: auto;
+                    padding: var(--space-lg);
+                    z-index: 2;
+                }
+            }
+
+            .idContainer, .emailContainer, .roleContainer, .nameContainer, .genderContainer, .pinContainer{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                padding: var(--space-lg);
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 0.5vmin solid var(--color-green-light);
+                box-shadow: var(--shadow-control);
+                width: auto;
+
+                .subHeader{ 
+                    font-size: 2vmin; 
+                    width: 50vmin;
+                    box-sizing: border-box;
+                }
+
+                img{
+                    filter: invert();
+                    width: 2.8vmin;
+                    height: auto;
+                    cursor: pointer;
+                    transition: transform 0.2s ease;
+
+                    &:hover{ transform: scale(1.2); }
+                }
+
+                .idField, .emailField, .roleField, .nameField, .genderField, .pinField{
+                    display: flex;
+                    flex-direction: row;
+                    gap: var(--space-md);
+                    background-color: transparent;
+                    width: 100%;
+                    box-sizing: border-box;
+
+                    .editableInput{
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                        align-items: center;
+                        gap: var(--space-sm);
+                        width: 100%;
+                        box-sizing: border-box;
+
+                        input[type="checkbox"]{
+                            margin-right: var(--space-sm);
+                            cursor: pointer;
+                            accent-color: var(--color-green-light);
+                        }
+                    }
+
+                    img{
+                        filter: invert();
+                        width: 2.8vmin;
+                        height: auto;
+                        cursor: pointer;
+                        transition: transform 0.2s ease;
+
+                        &:hover{ transform: scale(1.2); }
+                    }
+                }
+            }
+        }
+
+        .profileContainer.visitorMode{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: var(--space-md);
+            padding: 1.1vmin;
+            width: 100%;
+            box-sizing: border-box;
+
+            label.mainHeader{ grid-area: 1 / 1 / 2 / 5; }
+            .imgWrapper{ grid-area: 2 / 1 / 6 / 2; }
+            .idContainer{ grid-area: 2 / 2 / 3 / 5; }
+            .roleContainer{ grid-area: 3 / 2 / 4 / 5; }
+            .nameContainer{ grid-area: 4 / 2 / 5 / 5; }
+            .genderContainer { grid-area: 5 / 2 / 6 / 5; }
+
+            .imgWrapper{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                border: 0.5vmin solid var(--color-green-light);
+                box-shadow: 1.2vmin 1.2vmin 0.8vmin rgba(0, 0, 0, 0.2);
+                border-top-left-radius: var(--radius-3xl);
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                box-sizing: border-box;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background-image: url("/assets/Background/AvatarBg.jpg");
+                    background-position: center;
+                    background-size: cover;
+                    background-repeat: no-repeat;       
+                    filter: brightness(0.8) blur(0.2vmin) grayscale(20%); 
+                    z-index: 1;
+                }
+
+                img{
+                    height: 23vmin;
+                    width: auto;
+                    padding: var(--space-lg);
+                    z-index: 2;
+                }
+            }
+
+            .idContainer, .roleContainer, .nameContainer, .genderContainer{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                padding: var(--space-lg);
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 0.5vmin solid var(--color-green-light);
+                box-shadow: var(--shadow-control);
+                width: auto;
+
+                .subHeader{ 
+                    font-size: 2vmin; 
+                    width: 50vmin;
+                    box-sizing: border-box;
+                }
+
+                img{
+                    filter: invert();
+                    width: 2.8vmin;
+                    height: auto;
+                    cursor: pointer;
+                    transition: transform 0.2s ease;
+
+                    &:hover{ transform: scale(1.2); }
+                }
+
+                .idField, .roleField, .nameField, .genderField{
+                    display: flex;
+                    flex-direction: row;
+                    gap: var(--space-md);
+                    background-color: transparent;
+                    width: 100%;
+                    box-sizing: border-box;
+
+                    .editableInput{
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: center;
+                        align-items: center;
+                        gap: var(--space-sm);
+                        width: 100%;
+                        box-sizing: border-box;
+
+                        input[type="radio"], input[type="checkbox"]{
+                            margin-right: var(--space-sm);
+                            cursor: pointer;
+                            accent-color: var(--color-green-light);
+                        }
+                    }
+
+                    img{
+                        filter: invert();
+                        width: 2.8vmin;
+                        height: auto;
+                        cursor: pointer;
+                        transition: transform 0.2s ease;
+
+                        &:hover{ transform: scale(1.2); }
+                    }
+                }
+            }
+        }
+
+        .actionsContainer{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+            width: 100%;
+            box-sizing: border-box;
+
+            .buttonWrapper{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: var(--space-md);
+                width: 100%;
+                box-sizing: border-box;
+
+                button{
+                    font-family: "Jersey 10";
+                    font-size: 2.5vmin;
+                    box-shadow: var(--shadow-control);         
+                    padding: var(--space-md);
+                    width: auto;
+                    box-sizing: border-box;
+                }
+
+                #resetButton{
+                    flex: 1;
+                    background-color: var(--color-green-light);
+                    border: 0.5vmin solid #fff;
+                    color: #fff;
+
+                    &:hover{
+                        color: var(--color-green-light);
+                        background-color: #fff;
+                        border: 0.5vmin solid var(--color-green-light);
+                    }
+                }
+
+                #deleteButton{
+                    flex: 1;
+                    background-color: #ff5858;
+                    border: 0.5vmin solid #fff;
+                    color: #fff;
+
+                    &:hover{
+                        color: #ff5858;
+                        background-color: #fff;
+                        border: 0.5vmin solid #ff5858;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "ai-driven-8-bit-webgame",
+  "description": "This project is a unique educational technology platform that uses the nostalgic aesthetic of an 8-bit web game to guide students through the complex process of college program matching and career exploration. By integrating a modern AI recommendation engine with a fun, gamified user experience, we aim to make informed decision-making accessible, engaging, and personal.",
+  "scripts": {
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && npm run start",
+    "start": "concurrently \"npm run frontend\" \"npm run backend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  },
+  "keywords": [
+    "AI",
+    "8-Bit",
+    "Web Game",
+    "Career Matching",
+    "College Program Recommendation"
+  ],
+  "author": "Alef Justin Loresca",
+  "license": "ISC"
+}

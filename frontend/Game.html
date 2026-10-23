@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Outdoor - An AI-Driven 8-bit Web Game For Personalized College Program Matching and Career Exploration</title>
+    <link rel="icon" type="image/x-icon" href="Logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="rotate-warning">
+        <p>Rotate your device for better experience</p>
+        <p>Make sure screen rotation is unlocked. If you still cannot view properly, please use a different browser/device</p>
+    </div>
+
+    <div id="game-container"></div>
+    <div id="ui-root"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script type="module" src="./src/main.tsx"></script>
+
+    <script>
+        window.addEventListener('resize', () => {                   
+            const warning = document.getElementById("rotate-warning");
+            
+            if (window.innerHeight > window.innerWidth) {
+                warning.style.display = "flex";
+            } else {
+                warning.style.display = "none";
+            }
+
+            if (window.game && window.game.scale) { 
+                setTimeout(() => {
+                    window.game.scale.refresh();
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

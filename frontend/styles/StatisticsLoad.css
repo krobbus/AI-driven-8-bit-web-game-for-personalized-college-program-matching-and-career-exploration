@@ -1,0 +1,181 @@
+.statisticContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-md);
+    margin: var(--space-sm);
+
+    .mainHeader{
+        font-size: 2.5vmin;
+        text-align: center;
+        padding: 0 var(--space-sm);
+    }
+
+    .subHeader{
+        font-size: 1.8vmin;
+        text-align: left;
+        padding: 0 var(--space-sm);
+    }
+
+    .selectedCourses, .nonselectedCourses{
+        display: flex;
+        flex-direction: column;
+        background-color: rgba(255, 255, 255, 0.1);
+        box-shadow: var(--shadow-control);
+        border: 0.5vmin solid var(--color-green-light);
+        padding: var(--space-xl);
+        width: 100%;
+        box-sizing: border-box;
+
+        .selectedCoursesHeader, .nonselectedCoursesHeader{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .drawerArrow {
+                width: 3.5vmin;
+                height: auto;
+                filter: invert();
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            }
+            .drawerArrow.open { transform: rotateX(180deg); }
+        }
+
+        .drawerContent {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.3s ease, padding-top 0.3s ease;
+        }
+
+        .drawerContent.show {
+            height: 100%;
+            opacity: 1;
+            padding-top: var(--space-md);
+        }
+
+        .drawerContent.hide {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+        }
+    }
+
+    .skillsPersonalityContainer{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        .tagsContainer, .personalityContainer{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: var(--space-md);         
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+            padding: var(--space-xl);
+            height: stretch;
+            width: 100%;
+            box-sizing: border-box;
+
+            .personalityList, .skillList{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                background-color: rgba(0, 0, 0, 0.2);
+                border-radius: var(--radius-lg);
+                box-sizing: border-box;
+
+                ul{
+                    display: flex;
+                    flex-direction: column;
+                    list-style: none;
+                    padding: 1.9vmin 0;
+                    margin: 0;
+                }
+
+                li, p{
+                    text-align: left;
+                    font-size: 1.6vmin;
+                }
+            }
+        }
+    }
+
+    .commentContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        padding: var(--space-xl);     
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 0.5vmin solid var(--color-green-light);
+        box-shadow: var(--shadow-control);
+        width: 100%;
+        box-sizing: border-box;
+
+        .commentButtons{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-md);
+            width: 100%;
+            box-sizing: border-box;
+
+            button{
+                font-family: "Jersey 10";
+                font-size: 2.5vmin;
+                padding: var(--space-md);
+                margin: 0;
+                color: var(--color-green-main);
+                background-color: #fff;
+                border: 0.5vmin solid var(--color-green-light);
+                box-shadow: var(--shadow-control);
+                cursor: pointer;
+                width: 100%;
+                box-sizing: border-box;
+
+                &:hover:not(:disabled){
+                    color: #fff;
+                    background-color: var(--color-green-light);
+                    border: 0.5vmin solid #fff;
+                }
+
+                &:disabled{
+                    color: #777;
+                    background-color: rgba(255, 255, 255, 0.3);
+                    border: 0.5vmin solid #777;
+                    box-shadow: none;
+                    cursor: not-allowed;
+                }
+            }
+        }
+
+        .aiCommentBox{
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+            text-align: left;
+            font-size: 1.6vmin;
+            padding: var(--space-xl);
+            width: 100%;
+            white-space: pre-wrap;
+            box-sizing: border-box;
+        }
+    }
+}

@@ -1,0 +1,244 @@
+@import "./theme.css";
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  user-select: none;
+}
+
+::-webkit-scrollbar{ width: 1.8vmin; }
+::-webkit-scrollbar-track{ background: rgba(0, 0, 0, 0.5); }
+::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: var(--radius-2xl);
+}
+::-webkit-scrollbar-thumb:hover { background-color: var(--color-green-main); }
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-image: url("/assets/Background/PLMUN.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: stretch;
+    background-attachment: scroll;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-blend-mode: multiply;
+
+    font-family: "Jersey 10";
+    text-align: center;
+    padding: 7.5vmin;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-xl);
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+
+    h1{
+        font-size: 7.5vmin;
+        text-shadow: 0.2vmin 0.2vmin var(--color-green-main);
+        letter-spacing: 0.2vmin;
+        color: #fff;
+        user-select: none;
+    }
+
+    #loginContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        #guestButton{
+            font-family: "Jersey 10";
+            font-size: 3.8vmin;
+            color: var(--color-green-main);
+            background-color: #fff;
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+
+            margin-top: var(--space-xl);
+            padding: var(--space-md);
+            width: 70vmin;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #fff;
+                background-color: var(--color-green-light);
+                border: 0.5vmin solid #fff;
+            }
+        }
+
+        .lineDivider{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            gap: var(--space-md);
+            user-select: none;
+            width: 100%;
+            box-sizing: border-box;
+                    
+            .line{
+                flex: auto;
+                flex-basis: auto;
+                border: none;
+                outline: none;
+                height: 0.5vmin;
+                background: #fff;
+            }
+
+            .text{
+                font-size: 5vmin;
+                color: #fff;
+                text-shadow: 0.2vmin 0.2vmin #000;
+            }
+        }
+
+        #accountLoginLayout{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-md);
+            max-width: 92vmin;
+            width: 100%;
+            box-sizing: border-box;
+
+            #inputEmailId, #passWrapper{
+                flex: 1;
+                min-width: 46vmin;
+                box-sizing: border-box;
+
+                &:focus { border-color: #555; }
+            }
+
+            #inputEmailId{
+                font-family: "Jersey 10";
+                font-size: 3.8vmin;
+                padding: var(--space-md);
+                border-radius: var(--radius-sm);
+                border: 0.6vmin solid var(--color-green-light);
+            }
+
+            #passWrapper{
+                position: relative;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: var(--space-md);
+                border-radius: var(--radius-sm);
+                background: #fff;
+                border: 0.6vmin solid var(--color-green-light);
+
+                #inputPassword{
+                    font-family: "Jersey 10";
+                    font-size: 3.8vmin;
+                    border: 0;
+                    outline: none;
+                    width: stretch;
+                    box-sizing: border-box;
+                }
+
+                button{
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    display: flex;
+
+                    img{
+                        position: relative;
+                        width: auto;
+                        height: 3.8vmin;
+                        pointer-events: none;
+                        filter: invert(48%) sepia(13%) saturate(924%) hue-rotate(68deg) brightness(92%) contrast(85%);
+                    }
+                }
+            }
+        }
+
+        #loginButton{
+            font-family: "Jersey 10";
+            font-size: 3.8vmin;
+            color: var(--color-green-main);
+            background-color: #fff;
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+
+            margin-top: var(--space-xl);
+            padding: var(--space-md);
+            width: 70vmin;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #fff;
+                background-color: var(--color-green-light);
+                border: 0.5vmin solid #fff;
+            }
+        }
+
+        #loginMessage{ font-size: 3.8vmin; }
+
+        #loginLinkWrapper{
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-xl);
+
+            #manual, #forgotPass{
+                text-decoration: underline;
+                font-size: 3.8vmin;
+                color: #DAD7CD;
+                cursor: pointer;
+                transition: transform 0.3s ease-in-out;
+
+                &:hover{ transform: scale(1.05); }
+            }
+        }
+    }
+}
+
+#loadingScreen {
+    position: fixed;
+    inset: 0;
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+    color: #fff;
+    font-family: "Jersey 10";
+    font-size: 5.5vmin;
+    letter-spacing: 0.2vmin;
+    text-align: center;
+
+    img {
+        width: 23vmin;
+        height: 23vmin;
+        image-rendering: pixelated;
+    }
+
+    p{ padding: var(--space-md); }
+
+    &.fadeOut {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease-out;
+    }
+}

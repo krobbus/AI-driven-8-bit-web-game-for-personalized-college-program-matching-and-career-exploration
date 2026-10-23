@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page - An AI-Driven 8-bit Web Game For Personalized College Program Matching and Career Exploration</title>
+    <link rel="icon" type="image/x-icon" href="Logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h1>An AI-Driven 8-bit Web Game For Personalized College Program Matching and Career Exploration</h1>
+    
+    <section id="loginContainer">
+        <button id="guestButton">Play as a Guest</button>
+
+        <section class="lineDivider">
+            <span class="line"></span>
+            <span class="text">or login with existing account</span>
+            <span class="line"></span>
+        </section>
+
+        <section id="accountLoginLayout">
+            <input id="inputEmailId" placeholder="Enter your ID / Email" type="text" />
+
+            <div id="passWrapper">
+                <input id="inputPassword" placeholder="Enter your password" type="password" />
+
+                <button type="button" id="togglePass">
+                    <img src="assets/WebAssets/PadlockClosed.png" alt="Show/Hide PIN">
+                </button>
+            </div>
+        </section>
+
+        <button id="loginButton">Log In</button>
+        <p id="loginMessage"></p>
+
+        <section id="loginLinkWrapper">
+            <a id="forgotPass" onclick="passwordRecovery()">Forgot Password?</a>
+            <a id="manual" onclick="manual()">How To Play?</a>
+        </section>
+
+        <section id="loadingScreen">
+            <section class="loadingBox">
+                <img src="assets/WebAssets/Hourglass.gif" alt="Loading..." />
+                <p>LOADING...</p>
+            </section>
+        </section>
+    </section>
+
+    <div id="loginModalRoot"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script type="module" src="src/pages/login/login.js"></script>
+    <script type="module" src="src/pages/login/LoginOverlay.tsx"></script>
+</body>
+</html>

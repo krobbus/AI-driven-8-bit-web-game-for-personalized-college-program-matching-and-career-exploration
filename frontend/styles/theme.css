@@ -1,0 +1,22 @@
+:root {
+  --color-green-dark: #344e41;
+  --color-green-main: #588157;
+  --color-green-light: #a3b18a;
+
+  --space-xs: 0.6vmin;
+  --space-sm: 1.2vmin;
+  --space-md: 1.8vmin;
+  --space-lg: 2.3vmin;
+  --space-xl: 3.7vmin;
+  --space-2xl: 4.7vmin;
+
+  --radius-xs: 0.5vmin;
+  --radius-sm: 0.6vmin;
+  --radius-md: 1.2vmin;
+  --radius-lg: 2.3vmin;
+  --radius-xl: 3.4vmin;
+  --radius-2xl: 3.5vmin;
+  --radius-3xl: 5.8vmin;
+
+  --shadow-control: 1.2vmin 1.2vmin 0.8vmin rgba(0, 0, 0, 0.1);
+}

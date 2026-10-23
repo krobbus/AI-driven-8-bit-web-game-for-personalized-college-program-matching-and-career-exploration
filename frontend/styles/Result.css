@@ -1,0 +1,138 @@
+.resultContainer{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    padding: var(--space-xl);
+    margin: 0;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+
+    #mainTitle{
+        font-size: 3vmin;
+        text-wrap: wrap;
+        margin: 0;
+        text-align: left;
+        width: 100%;
+        max-width: 70vmin;
+        user-select: none;
+    }
+
+    .mainHeader{
+        font-size: 2.2vmin;
+        text-align: center;
+    }
+
+    main{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        .courseInfo{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-md);
+            background-color: var(--color-green-dark);
+            border-bottom-left-radius: var(--radius-xl);
+            border-bottom-right-radius: var(--radius-xl);
+            padding: 2.8vmin;
+            margin: 0;
+
+            .courseTitle, .courseDescription{ 
+                font-size: 2.4vmin;
+                text-align: center;
+            }
+
+            .courseDescription{
+                font-size: 2.2vmin;
+                color: #DAD7CD;
+            }
+        }
+
+        .resultEntry {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8vmin;
+            border: 0.8vmin dashed #DAD7CD;
+            padding: 2.6vmin;
+            width: 100%;
+            box-sizing: border-box;
+
+            .resultQuestion { font-size: 2vmin; color: #ffffff; text-align: justify; }
+            .answerContainer{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                .resultAnswer, .resultCorrect { font-size: 1.8vmin; color: var(--color-green-light); text-align: center; }
+                .resultWrong { font-size: 1.8vmin; color: #f6898b; text-align: center; }
+            }
+            .explanationContainer{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: var(--space-md);
+                padding: var(--space-lg);
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 0.5vmin solid var(--color-green-light);
+                box-shadow: var(--shadow-control);
+                width: 100%;
+                box-sizing: border-box;
+
+                .resultExplanation { font-size: 1.6vmin; color: #DAD7CD; text-align: center; }
+                .resultSource { font-size: 1.6vmin; color: #DAD7CD; text-align: center; }
+                .urlField{
+                    display: flex;
+                    flex-direction: row;
+                    gap: var(--space-md);
+                    background-color: transparent;
+                    width: 100%;
+                    box-sizing: border-box;
+
+                    #urlLink{
+                        flex: 1;
+                        overflow: hidden;
+                        color: #DAD7CD;
+                    }
+
+                    img{
+                        filter: invert();
+                        width: 2.8vmin;
+                        height: auto;
+                        cursor: pointer;
+                        transition: transform 0.2s ease;
+
+                        &:hover{ transform: scale(1.2); }
+                    }
+                }
+            }
+        }
+
+        #proceedButton{
+            font-family: "Jersey 10";
+            font-size: 2.3vmin;
+            color: var(--color-green-main);
+            background-color: #fff;
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+            padding: var(--space-md);
+            width: 23vmin;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #fff;
+                background-color: var(--color-green-light);
+                border: 0.5vmin solid #fff;
+            }
+        }
+    }
+}

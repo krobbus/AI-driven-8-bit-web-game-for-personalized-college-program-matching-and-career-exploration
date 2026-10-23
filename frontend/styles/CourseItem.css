@@ -1,0 +1,139 @@
+.courseStatCard{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-green-main);
+    border: 1.1vmin solid var(--color-green-dark);
+
+    .courseInfo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        background-color: var(--color-green-dark);
+        border-bottom-left-radius: var(--radius-xl);
+        border-bottom-right-radius: var(--radius-xl);
+        padding: var(--space-lg);
+        margin: 0;
+
+        .courseTitle, .courseDescription{ 
+            font-size: 1.9vmin;
+            text-align: center;
+        }
+
+        .courseDescription{
+            font-size: 1.4vmin;
+            color: #DAD7CD;
+        }
+    }
+
+    .courseContent{
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        padding: var(--space-xl);
+
+        .taskGrid{
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: 0 var(--space-xl);
+
+            .taskItem{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+
+                &:last-child {
+                    border-top: 0.5vmin dashed var(--color-green-light);
+                    margin-top: var(--space-md);
+                    padding-top: var(--space-md);
+                }
+
+                .assessmentTitle{ font-size: 1.6vmin; }
+                .statusDone, .statusPending{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    gap: var(--space-md);
+                    font-size: 1.6vmin;
+
+                    img{
+                        filter: invert();
+                        width: 2.8vmin;
+                        height: auto;
+                        cursor: pointer;
+                        transition: transform 0.2s ease;
+
+                        &:hover{ transform: scale(1.2); }
+                    }
+                }
+            }
+        }
+    }
+
+    .courseStatus{
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        background-color: var(--color-green-dark);
+        border-top-left-radius: var(--radius-xl);
+        border-top-right-radius: var(--radius-xl);
+        padding: var(--space-lg) 7.4vmin;
+
+        .courseProgressContainer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
+            width: 100%;
+            box-sizing: border-box;
+
+            .progressBarContainer{
+                width: 100%;
+                height: 3.5vmin;
+                background-color: #222;
+                border: 0.5vmin solid var(--color-green-light);
+                position: relative;
+                box-sizing: border-box;
+
+                .progressBar {
+                    height: 100%;
+                    background-color: var(--color-green-main);     
+                    background-image: linear-gradient(
+                        45deg,
+                        rgba(255, 255, 255, 0.15) 25%,
+                        transparent 25%,
+                        transparent 50%,
+                        rgba(255, 255, 255, 0.15) 50%,
+                        rgba(255, 255, 255, 0.15) 75%,
+                        transparent 75%,
+                        transparent
+                    );
+                    background-size: 2.3vmin;
+                    transition: width 0.5s ease-in-out;
+                }
+
+                .progressPercentage{ font-size: 1.6vmin; }
+            }
+        }
+
+        .statusRow{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.6vmin;
+
+            a{
+                color: #fff;
+                cursor: pointer;
+            }
+
+            a:hover{ transform: scale(1.02); }
+        }
+    }
+}

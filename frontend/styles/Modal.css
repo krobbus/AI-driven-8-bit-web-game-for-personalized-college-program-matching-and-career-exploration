@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Micro+5&family=Pixelify+Sans:wght@400..700&display=swap');
+
+.modalBackdrop, .modalBackdrop.resultBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(1vmin);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .modalContainer {
+        border: 1vmin solid #dad7cd;
+        background-color: var(--color-green-main);
+        margin: 1rem;
+        width: 150vmin;
+        height: 70vmin;
+        image-rendering: pixelated;
+        z-index: 1001;
+
+        .modalContent {
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 70vmin;
+            width: 100%;
+            font-family: "Press Start 2P";
+            font-size: clamp(10px, 2vmin, 18px);
+            line-height: 1.5;
+            letter-spacing: 0.2vmin;
+            color: #fff;
+
+            #closeButton {
+                position: absolute;
+                top: 2.4vmin;
+                right: 3vmin;
+                background: #ff4444;
+                color: #fff;
+                border: 0.5vmin solid #fff;
+                padding: 1vmin 2vmin;
+                cursor: pointer;
+                font-family: "Press Start 2P";
+                font-size: 3vmin;
+                z-index: 1005;
+
+                &:hover{
+                    transform: scale(1.05);
+                }
+            }
+        }
+    }
+}
+
+.modalBackdrop.resultBackdrop { z-index: 1100; }

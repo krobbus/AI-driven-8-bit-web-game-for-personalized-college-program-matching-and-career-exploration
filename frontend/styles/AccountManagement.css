@@ -1,0 +1,568 @@
+.accountManagementModal{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    padding: var(--space-xl);
+    margin: 0;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+
+    .loadingContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+
+        .loadingText{
+            font-size: 2.3vmin;
+            color: #fff;
+        }
+    }
+
+    #mainTitle{
+        font-size: 3vmin;
+        text-wrap: wrap;
+        margin: 0;
+        text-align: left;
+        width: 100%;
+        max-width: 70vmin;
+        user-select: none;
+    }
+
+    .mainHeader{
+        font-size: 2.2vmin;
+        text-align: center;
+    }
+
+    .subHeader{
+        font-size: 1.8vmin;
+        text-align: left;
+        color: #fff;         
+    }
+
+    .requirementHint{
+        font-size: 1.6vmin;
+        text-align: left;
+    }
+
+    .errorContainer{
+        font-size: 1.6vmin;
+        text-align: left;
+        padding: var(--space-lg);
+        background-color: var(--color-green-dark);
+        justify-items: center;
+        white-space: pre-line;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    nav{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        background: var(--color-green-light);
+        border-radius: var(--radius-md);
+        height: auto;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+
+        button{
+            color: #5e5e5e;
+            text-align: center;
+            font-family: "Jersey 10";
+            font-size: 2.5vmin;
+            border: none;
+            border-radius: var(--radius-md);
+            width: 100%;
+            margin: 0;
+            padding: 1.1vmin;
+            box-sizing: border-box;
+            transition: background 0.4s ease-in-out;
+        }
+
+        button.active{
+            background: var(--color-green-dark);
+            color: #fff;
+        }
+
+        button:not(.active){
+            background: transparent;
+        }
+    }
+
+    .instructionContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--color-green-dark);
+        padding: var(--space-md);
+        border-radius: var(--radius-md);
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        .instructions{
+            font-size: 1.6vmin;
+            text-align: justify;
+            text-transform: uppercase;
+
+            .highlight{ 
+                border-radius: var(--radius-md);
+                padding: var(--space-sm);
+                color: var(--color-green-light);
+            }
+        }
+    }
+
+    .sliderViewport {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        transition: height 0.3s ease-in-out;
+        box-sizing: border-box;
+
+        .sliderWrapper {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            width: 300%;
+            transition: transform 0.6s ease-in-out;
+            box-sizing: border-box;
+
+            &.character { transform: translateX(0%); }
+            &.preference { transform: translateX(-33.33%); }
+            &.account { transform: translateX(-66.66%); }
+
+            .page { 
+                padding: 0 1.1vmin;
+                height: auto;
+                width: 33.33%;
+                flex-shrink: 0;
+                box-sizing: border-box;
+            }
+        }
+
+        .sliderWrapper.character .preferencePage,
+        .sliderWrapper.character .accountPage,
+        .sliderWrapper.preference .characterPage,
+        .sliderWrapper.preference .accountPage,
+        .sliderWrapper.account .characterPage,
+        .sliderWrapper.account .preferencePage {
+            height: 0;
+            overflow: hidden;
+            visibility: hidden;
+        }
+
+        .activePage {
+            height: auto;
+            visibility: visible;
+        }
+    }
+
+    .characterContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        .genderContainer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+
+            .imgContainer{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                border-radius: var(--radius-2xl);
+                height: 29vmin;
+                width: 60%;
+                overflow: hidden;
+                box-sizing: border-box;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;        
+                    background-image: url("/assets/Background/AvatarBg.jpg");
+                    background-position: center;
+                    background-size: cover;
+                    background-repeat: no-repeat; 
+                    filter: brightness(0.8) blur(0.2vmin) grayscale(20%); 
+                    z-index: 1;
+                }
+
+                img{
+                    height: 23vmin;
+                    width: auto;
+                    z-index: 2;
+                }
+            }
+
+            .genderToggle{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                flex-grow: 1;
+                gap: var(--space-md);
+
+                button{
+                    font-family: "Jersey 10";
+                    font-size: 2.5vmin;
+                    color: #000;
+                    background-color: #fff;
+                    border: 0.6vmin solid #000;
+                    flex-grow: 1;
+                    height: 5.7vmin;
+                    width: 23vmin;
+                    box-sizing: border-box;
+                }
+
+                #maleButton.active {
+                    color: #fff;
+                    background-color: rgb(61, 166, 252);
+                    border: 0.6vmin solid #fff;
+                }
+
+                #femaleButton.active {
+                    color: #fff;
+                    background-color: rgb(255, 134, 221);
+                    border: 0.6vmin solid #fff;
+                }
+
+                #maleButton:not(.active) {
+                    color: rgb(255, 255, 255, 0.3);
+                    background-color: rgba(61, 166, 252, 0.3);
+                    border: 0.6vmin solid rgb(255, 255, 255, 0.3);
+                }
+
+                #femaleButton:not(.active) {
+                    color: rgb(255, 255, 255, 0.3);
+                    background-color: rgba(255, 134, 221, 0.3);
+                    border: 0.6vmin solid rgb(255, 255, 255, 0.3);
+                }
+            }
+        }
+
+        .nameContainer{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            box-sizing: border-box;
+
+            input{
+                font-family: "Jersey 10";
+                font-size: 2.8vmin;
+                padding: var(--space-md);
+                border-radius: var(--radius-sm);
+                border: 0.6vmin solid var(--color-green-light);
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    }
+
+    .preferenceContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        .tagsInputContainer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: var(--space-md);
+            width: 100%;
+            box-sizing: border-box;
+
+            .dropdownContainer{
+                position: relative;
+                display: flex;
+                flex-grow: 1;
+                flex-direction: column;
+                box-sizing: border-box;
+
+                input{
+                    font-family: "Jersey 10";
+                    font-size: 2.8vmin;
+                    padding: var(--space-md);
+                    border-radius: var(--radius-sm);
+                    border: 0.6vmin solid var(--color-green-light);
+                    width: 100%;
+                    box-sizing: border-box;
+
+                    &:focus { border-color: #555; }
+                }
+
+                ul{
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    margin: 0;
+                    padding: 0;
+                    width: auto;
+                    max-height: 29vmin;
+                    overflow-y: auto;
+                    background-color: #fff;
+                    list-style: none;
+                    z-index: 1000;
+                    box-sizing: border-box;
+
+                    li {
+                        padding: 1.1vmin;
+                        font-size: 1.9vmin;
+                        color: black;
+                        cursor: pointer;
+                        border-bottom: 0.1vmin solid rgb(51, 51, 51, 0.5);
+                        
+                        &:hover {
+                            background-color: #f0f0f0;
+                            color: var(--color-green-main);
+                        }
+                    }
+                }
+            }
+
+            #addButton{
+                font-family: "Jersey 10";
+                font-size: 2.5vmin;
+                color: var(--color-green-main);
+                background-color: #fff;
+                border: 0.5vmin solid var(--color-green-light);
+                box-shadow: 1,2vmin 1.2vmin 0.8vmin rgba(0, 0, 0, 0.1);
+                padding: var(--space-md);
+                width: 23vmin;
+                box-sizing: border-box;
+
+                &:hover{
+                    color: #fff;
+                    background-color: var(--color-green-light);
+                    border: 0.5vmin solid #fff;
+                }
+            }
+        }
+
+        .savedTagsWrapper{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-md);
+            width: 100%;
+            box-sizing: border-box;
+
+            #skillContainer, #personalityContainer{
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: var(--space-md);
+                width: 100%;
+                box-sizing: border-box;
+
+                ul{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    height: 35vmin;
+                    padding: 0;
+                    margin: 0;
+                    list-style: none;
+                    border: 0.6vmin dashed rgb(255, 255, 255, 0.8);
+                    background: rgba(253, 253, 253, 0.2);
+                    overflow-y: auto;
+
+                    li {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: var(--space-sm) 1.4vmin;
+                        height: auto;
+                        width: 100%;
+                        color: black;
+                        font-family: "Jersey 10";
+                        font-size: 2vmin;
+                        text-transform: uppercase;
+                        border: none;
+                        border-bottom: 0.2vmin dashed #000;
+                        border-radius: 0;
+                        box-sizing: border-box;
+
+                        &:last-child { border-bottom: none; }
+                        &.skill { background-color: #c6f1ff; }
+                        &.personality { background-color: #fafad2; }
+
+                        button {
+                            font-family: "Jersey 10";
+                            font-size: 1.8vmin;
+                            color: rgb(255, 255, 255);
+                            background-color: rgba(0, 0, 0, 0.2);
+                            border: none;
+                            justify-items: center;
+                            box-sizing: border-box;
+
+                            &:hover {
+                                color: #ff0000;
+                                transform: scale(1.2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .courseSelectionContainer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md); 
+            justify-content: center;
+
+            input[type="checkbox"]{
+                display: none;
+                image-rendering: pixelated;
+
+                &:checked + label{
+                    border-color: var(--color-green-light);
+                    background-color: var(--color-green-dark);
+
+                    em{ color: #dad7cd; }
+                }
+            }
+
+            label{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: var(--space-md);
+                padding: var(--space-lg);
+                border: 0.5vmin solid #dad7cd;
+                line-height: 2.5vmin;
+                background-color: var(--color-green-light);
+                color: #fff;
+                cursor: pointer;
+                box-sizing: border-box;
+
+                &:hover { border-color: var(--color-green-dark); }
+                strong { font-size: 2vmin; }
+                em {
+                    font-size: 1.8vmin;
+                    color: #333;
+                }
+            }
+        }
+    }
+
+    .accountContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: var(--space-md);
+        width: 100%;
+        box-sizing: border-box;
+
+        .emailContainer, .passContainer, .pinContainer, .confirmPassContainer, .confirmPinContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            box-sizing: border-box;
+
+            input{
+                font-family: "Jersey 10";
+                font-size: 2.8vmin;
+                padding: var(--space-md);
+                border-radius: var(--radius-sm);
+                border: 0.6vmin solid var(--color-green-light);
+                width: 100%;
+                box-sizing: border-box;
+
+                &:focus { border-color: #555; }
+            }
+        }
+
+        .passWrapper, .pinWrapper, .confirmPassWrapper, .confirmPinWrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+
+            button{
+                position: absolute;
+                right: 1vmin;
+                background: none;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: var(--space-md);
+
+                img{
+                    filter: invert(48%) sepia(13%) saturate(924%) hue-rotate(68deg) brightness(92%) contrast(85%);
+                    width: 4.6vmin;
+                    height: auto;
+                    pointer-events: none;
+                    box-sizing: border-box;
+                }
+            }
+        }
+
+        .pinLayout{
+            display: flex;
+            flex-direction: row;
+            gap: var(--space-md);
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    .btnWrapper{
+        display: flex;
+        flex: 1;
+        justify-content: center;
+
+        #saveButton{
+            font-family: "Jersey 10";
+            font-size: 2.5vmin;
+            color: var(--color-green-main);
+            background-color: #fff;
+            border: 0.5vmin solid var(--color-green-light);
+            box-shadow: var(--shadow-control);
+            margin-top: var(--space-xl);
+            padding: var(--space-md);
+            width: 46vmin;
+            box-sizing: border-box;
+
+            &:hover{
+                color: #fff;
+                background-color: var(--color-green-light);
+                border: 0.5vmin solid #fff;
+            }
+        }
+    }
+}
