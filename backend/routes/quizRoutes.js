@@ -103,7 +103,7 @@ router.post("/api/generate-skill-pers", async (req, res) => {
   === JSON SCHEMA (repeat ${numQuestions} times) ===
   {
     "question": "...",
-    "options": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+    "options": ["Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree"],
     "category": "..."
   }
 
