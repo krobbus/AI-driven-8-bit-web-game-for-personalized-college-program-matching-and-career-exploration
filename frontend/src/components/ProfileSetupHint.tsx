@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { ModalProps } from '../types/props';
 import '../../styles/Modal.css';
 import '../../styles/ProfileSetupHint.css';
 
 const ProfileSetupHint: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+    useEffect(() => {
+        if (window.game?.input?.keyboard) {
+            isOpen ? window.game.input.keyboard.stopListeners() : window.game.input.keyboard.startListeners();
+        }
+        return () => window.game?.input?.keyboard?.startListeners();
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
     return (
@@ -22,9 +29,8 @@ const ProfileSetupHint: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                             alt="Left Wing map showing the ICT Office"
                         />
                         <p>
-                            In the Left Wing, go directly in front of the window at the
-                            <strong> ICT Office</strong> and interact to open Account Management.
-                            Create your profile and set your preferences there.
+                            In the Left Wing at 2nd Floor, go directly in front of the window at the
+                            <strong> ICT Office</strong> and interact to open Profile Creation.
                         </p>
                         <button className="profileSetupHintContinue" onClick={onClose}>GOT IT</button>
                     </section>
