@@ -1,0 +1,48 @@
+.profileSetupHint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(12px, 2.2vmin, 24px);
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: clamp(24px, 5vmin, 56px);
+    text-align: center;
+    font-family: "Press Start 2P";
+
+    h1 {
+        margin: 0;
+        font-size: clamp(16px, 3vmin, 28px);
+        line-height: 1.5;
+    }
+
+    p {
+        max-width: 1000px;
+        margin: 0;
+        font-size: clamp(10px, 1.7vmin, 16px);
+        line-height: 1.9;
+    }
+
+    strong {
+        color: #f5e6a8;
+    }
+
+    img {
+        display: block;
+        max-width: min(100%, 1000px);
+        max-height: 42vh;
+        object-fit: contain;
+        image-rendering: pixelated;
+        border: clamp(3px, 0.6vmin, 6px) solid #dad7cd;
+    }
+
+    .profileSetupHintContinue {
+        padding: clamp(10px, 1.5vmin, 16px) clamp(18px, 3vmin, 32px);
+        border: clamp(2px, 0.4vmin, 4px) solid #fff;
+        background: var(--color-green-dark);
+        color: #fff;
+        cursor: pointer;
+        font-family: "Press Start 2P";
+        font-size: clamp(10px, 1.5vmin, 14px);
+    }
+}
