@@ -30,7 +30,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ onClose , isOpen, courseCode 
         const handleData = (snapshot: any) => {
             const data = snapshot.val();
             if (data) {
-                const playerList: PlayerData[] = Object.keys(data).map((key) => ({
+                const playerList: PlayerData[] = Object.keys(data)
+                    .filter(key => data[key]?.adminMode !== true)
+                    .map((key) => ({
                     id: key,
                     ...data[key],
                     playerId: data[key].playerID || key, 
@@ -39,7 +41,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ onClose , isOpen, courseCode 
                     gender: data[key].gender || "Male",
                     assessments: data[key].assessments || {},
                     course: Array.isArray(data[key].course) ? data[key].course : []
-                }));
+                    }));
                 setPlayers(playerList);
             }
             setLoading(false);
