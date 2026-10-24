@@ -46,6 +46,7 @@ export default class LeftWing extends Phaser.Scene {
         const userData = snapshot.val();
         const gender = (userData && userData.gender) ? userData.gender : 'male';
         this.playerName = (userData && userData.name) ? userData.name : "Guest";        
+        this.isPermanentPlayer = userData?.temporary === false;
 
         this.player = new Player(this, spawnX, spawnY, gender, this.playerName)                                          // player
             .setDepth(1)
@@ -162,11 +163,18 @@ export default class LeftWing extends Phaser.Scene {
 
         this.isMenuOpen = false;
         this.menuIndex = 0;
-        this.menuOptions = [
-            { text: "CREATE ACCOUNT", target: "openAccountModal" },
-            { text: "VIEW DASHBOARD", target: "openDashboardModal" },
-            { text: "CANCEL", target: "cancel" }
-        ];
+        this.menuOptions = this.isPermanentPlayer
+            ? [
+                { text: "PROFILE MANAGEMENT", target: "openProfilePreferencesModal" },
+                { text: "ACCOUNT MANAGEMENT", target: "openAccountRegistrationModal" },
+                { text: "VIEW DASHBOARD", target: "openDashboardModal" },
+                { text: "CANCEL", target: "cancel" }
+            ]
+            : [
+                { text: "PROFILE CREATION", target: "openProfilePreferencesModal" },
+                { text: "ACCOUNT REGISTRATION", target: "openAccountRegistrationModal" },
+                { text: "CANCEL", target: "cancel" }
+            ];
 
         const savedMode = localStorage.getItem('mobileMode');
         if (savedMode === null) {
@@ -213,7 +221,8 @@ export default class LeftWing extends Phaser.Scene {
 
         this.menuTextObjects = [];
         this.menuOptions.forEach((opt, i) => {
-            let txt = this.add.text(0, i * 25 + 35, opt.text, {
+            const y = i * 25 + 35;
+            const txt = this.add.text(0, y, opt.text, {
                 fontFamily: '"Press Start 2P"',
                 fontSize: "10px",
                 fill: "#ffffff"
@@ -221,6 +230,12 @@ export default class LeftWing extends Phaser.Scene {
             this.menuTextObjects.push(txt);
             this.hintLabel.add(txt);
         });
+        this.menuBubbleWidth = Math.max(
+            200,
+            ...this.menuTextObjects.map((text, i) =>
+                text.width + 30 + this.menuPointer.width + 30
+            )
+        );
     }
 
     update(){
@@ -388,8 +403,8 @@ export default class LeftWing extends Phaser.Scene {
             .clear()
             .fillStyle(0x125729, 0.9)
             .lineStyle(4, 0xffffff, 1)
-            .fillRoundedRect(-20, -15, 200, 35 + this.menuOptions.length * 30, 10)
-            .strokeRoundedRect(-20, -15, 200, 35 + this.menuOptions.length * 30, 10);
+            .fillRoundedRect(-30, -15, this.menuBubbleWidth, 35 + this.menuOptions.length * 30, 10)
+            .strokeRoundedRect(-30, -15, this.menuBubbleWidth, 35 + this.menuOptions.length * 30, 10);
 
         this.hintPart1.setVisible(!isMenu);
         this.hintPart2.setVisible(!isMenu);
@@ -400,11 +415,12 @@ export default class LeftWing extends Phaser.Scene {
                 txt.setVisible(true);
                 const isSelected = (i === this.menuIndex);
                 const isCancel = this.menuOptions[i].target === "cancel";
+                const pointerX = txt.x + txt.width + 8;
                 if (isSelected) {
                     txt.setFill(isCancel ? "#ff5555" : "#80ff60");
                     this.menuPointer.setFill(isCancel ? "#ff5555" : "#80ff60");
                     this.menuPointer.setVisible(true);
-                    this.menuPointer.setPosition(txt.x + txt.width + 10, txt.y);
+                    this.menuPointer.setPosition(pointerX, txt.y);
                 } else { txt.setFill("#ffffff"); }
             });
         } else {
@@ -426,13 +442,15 @@ export default class LeftWing extends Phaser.Scene {
     toggleSettings() { this.settingsPanel.setVisible(!this.settingsPanel.visible); }
 
     startPageTransition(targetSceneName, lastPosition) {
-        if (targetSceneName === 'openAccountModal') {
-            const interactAudio = this.sound.add('interactaudio');
-            interactAudio.once('complete', () => interactAudio.destroy());
-            interactAudio.play();
-
+        if (targetSceneName === 'openProfilePreferencesModal') {
             this.input.keyboard.resetKeys();
-            window.dispatchEvent(new CustomEvent('openAccountManagementModal'));
+            window.dispatchEvent(new CustomEvent('openProfilePreferencesCreationModal'));
+            return;
+        }
+
+        if (targetSceneName === 'openAccountRegistrationModal') {
+            this.input.keyboard.resetKeys();
+            window.dispatchEvent(new CustomEvent('openAccountRegistrationModal'));
             return;
         }
 
