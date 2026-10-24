@@ -12,8 +12,8 @@ import RightWing from './pages/scenes/rightWing.js';
 
 const PasswordRecovery = lazy(() => import('./components/PasswordRecovery'));
 const Manual = lazy(() => import('./components/Manual'));
-const AccountRegistration = lazy(() => import('./components/AccountManagement.js'));
-const ProfilePreferencesCreation = lazy(() => import('./components/ProfileManagement.js'));
+const AccountManagement = lazy(() => import('./components/AccountManagement'));
+const ProfileManagement = lazy(() => import('./components/ProfileManagement'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Leaderboard = lazy(() => import('./components/Leaderboard'));
 const Result = lazy(() => import('./components/Result'));
@@ -55,8 +55,8 @@ const config: Phaser.Types.Core.GameConfig = {
 const UIOverlay = () => {
   const [isPasswordRecoveryOpen, setIsPasswordRecoveryOpen] = useState(false);
   const [isManualOpen, setIsManualOpen] = useState(false);
-  const [isAccountRegistrationOpen, setIsAccountRegistrationOpen] = useState(false);
-  const [isProfilePreferencesOpen, setIsProfilePreferencesOpen] = useState(false);
+  const [isAccountManagementOpen, setIsAccountManagementOpen] = useState(false);
+  const [isProfileManagementOpen, setIsProfileManagementOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
@@ -84,8 +84,8 @@ const UIOverlay = () => {
 
     const handleOpenPasswordRecoveryModal = () => setIsPasswordRecoveryOpen(true);
     const handleOpenManualModal = () => setIsManualOpen(true);
-    const handleOpenAccountRegistrationModal = () => setIsAccountRegistrationOpen(true);
-    const handleOpenProfilePreferencesCreationModal = () => setIsProfilePreferencesOpen(true);
+    const handleOpenAccountManagementModal = () => setIsAccountManagementOpen(true);
+    const handleOpenProfileManagementModal = () => setIsProfileManagementOpen(true);
     const handleOpenDashboardModal = () => setIsDashboardOpen(true);
     const handleOpenLeaderboardModal = () => setIsLeaderboardOpen(true);
     const handleOpenProfileSetupHintModal = () => setIsProfileSetupHintOpen(true);
@@ -98,8 +98,8 @@ const UIOverlay = () => {
 
     window.addEventListener('openPasswordRecoveryModal', handleOpenPasswordRecoveryModal);
     window.addEventListener('openManualModal', handleOpenManualModal);
-    window.addEventListener('openAccountRegistrationModal', handleOpenAccountRegistrationModal);
-    window.addEventListener('openProfilePreferencesCreationModal', handleOpenProfilePreferencesCreationModal);
+    window.addEventListener('openAccountManagementModal', handleOpenAccountManagementModal);
+    window.addEventListener('openProfileManagementModal', handleOpenProfileManagementModal);
     window.addEventListener('openDashboardModal', handleOpenDashboardModal);
     window.addEventListener('openLeaderboardModal', handleOpenLeaderboardModal);
     window.addEventListener('openProfileSetupHintModal', handleOpenProfileSetupHintModal);
@@ -115,8 +115,8 @@ const UIOverlay = () => {
       window.removeEventListener('updateGameTitle', handleUpdateTitle);
       window.removeEventListener('openPasswordRecoveryModal', handleOpenPasswordRecoveryModal);
       window.removeEventListener('openManualModal', handleOpenManualModal);
-      window.removeEventListener('openAccountRegistrationModal', handleOpenAccountRegistrationModal);
-      window.removeEventListener('openProfilePreferencesCreationModal', handleOpenProfilePreferencesCreationModal);
+      window.removeEventListener('openAccountManagementModal', handleOpenAccountManagementModal);
+      window.removeEventListener('openProfileManagementModal', handleOpenProfileManagementModal);
       window.removeEventListener('openDashboardModal', handleOpenDashboardModal);
       window.removeEventListener('openLeaderboardModal', handleOpenLeaderboardModal);
       window.removeEventListener('openProfileSetupHintModal', handleOpenProfileSetupHintModal);
@@ -136,14 +136,14 @@ const UIOverlay = () => {
         onClose={() => setIsManualOpen(false)}
       />
 
-      <AccountRegistration
-        isOpen={isAccountRegistrationOpen}
-        onClose={() => setIsAccountRegistrationOpen(false)}
+      <AccountManagement
+        isOpen={isAccountManagementOpen}
+        onClose={() => setIsAccountManagementOpen(false)}
       />
 
-      <ProfilePreferencesCreation
-        isOpen={isProfilePreferencesOpen}
-        onClose={() => setIsProfilePreferencesOpen(false)}
+      <ProfileManagement
+        isOpen={isProfileManagementOpen}
+        onClose={() => setIsProfileManagementOpen(false)}
       />
 
       <Dashboard 

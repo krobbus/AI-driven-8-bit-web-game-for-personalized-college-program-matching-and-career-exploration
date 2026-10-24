@@ -444,13 +444,13 @@ export default class LeftWing extends Phaser.Scene {
     startPageTransition(targetSceneName, lastPosition) {
         if (targetSceneName === 'openProfilePreferencesModal') {
             this.input.keyboard.resetKeys();
-            window.dispatchEvent(new CustomEvent('openProfilePreferencesCreationModal'));
+            window.dispatchEvent(new CustomEvent('openProfileManagementModal'));
             return;
         }
 
         if (targetSceneName === 'openAccountRegistrationModal') {
             this.input.keyboard.resetKeys();
-            window.dispatchEvent(new CustomEvent('openAccountRegistrationModal'));
+            window.dispatchEvent(new CustomEvent('openAccountManagementModal'));
             return;
         }
 

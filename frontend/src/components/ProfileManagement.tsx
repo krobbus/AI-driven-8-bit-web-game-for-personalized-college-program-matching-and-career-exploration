@@ -3,7 +3,7 @@ import type { ModalProps } from '../types/props.js';
 import { db } from '../config/firebase.js';
 import { ApprovedSkills, ApprovedPersonalities } from '../pages/data/preferenceLib.js';
 import '../../styles/Modal.css';
-import '../../styles/AccountManagement.css';
+import '../../styles/Management.css';
 
 const ProfilePreferencesCreation: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     const [view, setView] = useState<'character' | 'preference'>('character');

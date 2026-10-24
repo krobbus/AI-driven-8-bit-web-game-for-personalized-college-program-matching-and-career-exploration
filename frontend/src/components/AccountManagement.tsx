@@ -3,7 +3,7 @@ import type { ModalProps } from '../types/props.js';
 import { db } from '../config/firebase.js';
 import { convertToPermanent, type PlayerData } from '../services/playerData.js';
 import '../../styles/Modal.css';
-import '../../styles/AccountManagement.css';
+import '../../styles/Management.css';
 
 type AccountProfile = Partial<PlayerData> & {
     tags?: { type: string }[];
