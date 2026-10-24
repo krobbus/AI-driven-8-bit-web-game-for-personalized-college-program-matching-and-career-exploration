@@ -4,6 +4,7 @@ import NPC from '/src/pages/prefabs/npc.js';
 import DialogueBubble from '/src/pages/prefabs/dialoguebubble.js';
 import { createMobileControls } from '/src/pages/utils/controls.js';
 import { createKeyboardHints } from '/src/pages/utils/keyboardHints.js';
+import { positionTopRightIcons } from '/src/pages/utils/positionTopRightIcons.js';
 import Settings from '/src/pages/prefabs/settings.js';
 
 export default class LeftWing extends Phaser.Scene {
@@ -101,7 +102,7 @@ export default class LeftWing extends Phaser.Scene {
         this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.sKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
-        this.manual = this.add.sprite(this.scale.width - 60, 140, 'manual')                                         // manual
+        this.manual = this.add.sprite(0, 0, 'manual')
             .setDepth(3001)
             .setOrigin(1, 0)
             .setInteractive({ useHandCursor: true })
@@ -118,7 +119,7 @@ export default class LeftWing extends Phaser.Scene {
 
         this.settings = new Settings(this);                                                                         // settings
         this.settings.setDepth(3000);
-        this.add.sprite(this.scale.width - 60, 80, 'settings')
+        this.settingsIcon = this.add.sprite(0, 0, 'settings')
             .setDepth(3001)
             .setOrigin(1, 0)
             .setInteractive({ useHandCursor: true })
@@ -131,6 +132,7 @@ export default class LeftWing extends Phaser.Scene {
                 if (isModalOpened) return;
                 this.settings.toggle()
             });
+        positionTopRightIcons(this, this.manual, this.settingsIcon);
 
         let debugGraphics = this.add.graphics();//.lineStyle(2, 0x00ff00, 1);
         this.activeZone = null;
