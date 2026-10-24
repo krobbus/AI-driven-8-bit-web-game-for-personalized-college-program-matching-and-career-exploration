@@ -1,6 +1,7 @@
 import { db } from '../../config/firebase';
 import { createMobileControls } from '/src/pages/utils/controls.js';
 import { createKeyboardHints } from '/src/pages/utils/keyboardHints.js';
+import { positionTopRightIcons } from '../utils/positionTopRightIcons';
 import Settings from '/src/pages/prefabs/settings.js';
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -120,7 +121,7 @@ export default class Classroom extends Phaser.Scene {
 
         this.settings = new Settings(this);                                                                         // settings
         this.settings.setDepth(3000);
-        this.add.sprite(this.scale.width - 60, 80, 'settings')
+        this.settingsIcon = this.add.sprite(0, 0, 'settings')
             .setDepth(3001)
             .setOrigin(1, 0)
             .setInteractive({ useHandCursor: true })
@@ -129,7 +130,7 @@ export default class Classroom extends Phaser.Scene {
                 if (isModalOpened) return;
                 this.settings.toggle()
             });
-        
+        positionTopRightIcons(this, this.manual, this.settingsIcon);
         this.activeZone = null;
 
         const savedMode = localStorage.getItem('mobileMode');
@@ -277,62 +278,45 @@ export default class Classroom extends Phaser.Scene {
         } catch {
             if (!this.scene.isActive('Classroom')) return;
             this.stopThinkingAnimation();
+            this.isLoadingQuestions = false;
             this.questionUI("Oops! The AI took too long to respond.\nPlease try again in a moment.");
             this.optionsUI(["Retry"]);
             this.enableAllOptions(); 
         }
     }
 
-    questionUI(question){
-        if (this.questionContainer) this.questionContainer.destroy();
+    questionUI(question, hasReferences = false){
+        if (this.questionWheelHandler) {
+            this.input.off('wheel', this.questionWheelHandler);
+            this.questionWheelHandler = null;
+        }
+        if (this.questionScrollHandlers) {
+            this.input.off('pointerdown', this.questionScrollHandlers.pointerdown);
+            this.input.off('pointermove', this.questionScrollHandlers.pointermove);
+            this.input.off('pointerup', this.questionScrollHandlers.pointerup);
+            this.input.off('pointerupoutside', this.questionScrollHandlers.pointerup);
+            this.questionScrollHandlers = null;
+        }
+        if (this.questionContainer) {
+            if (this.questionText) this.questionText.clearMask(true);
+            if (this.questionMaskGraphics) this.questionMaskGraphics.destroy();
+            this.questionContainer.destroy();
+        }
         const isIdle = question === 'idle';
-
-        this.questionContainer = this.add.container(0, 75).setDepth(120);
-            const screenCenterX = this.cameras.main.worldView.x + this.cameras.main.width / 2; 
-
-            const padding = 30;
-            const bottomPad = 24;
-            const headerGap = 8;
-            const dividerGap = padding / 2;
-            const bodyTop = 10; 
-            const verticalGap = 5;
-
-            const tempCourseText = this.add.text(-9999, -9999, this.selectedCourse, {
-                fontFamily: '"Press Start 2P"', 
-                fontSize: "12px"
-            });
-
-            const tempTypeText = this.add.text(-9999, -9999, this.selectedType, {
-                fontFamily: '"Press Start 2P"', 
-                fontSize: "10px"
-            });
-
-            const headerWidth = Math.max(tempCourseText.width, tempTypeText.width) + 160;
-
-            this.headerWidth = headerWidth;
-                tempCourseText.destroy();
-                tempTypeText.destroy();
-            
-            const boxWidth = this.headerWidth + 160;
-            const boxY = verticalGap;
-
-            const CourseText = this.add.text(screenCenterX, boxY + padding, `${this.selectedCourse}`, {
-                fontFamily: '"Press Start 2P"',
-                fontSize: "12px",
-                color: "#ffffff",
-                align: "center",
-                resolution: 2
-            }).setOrigin(0.5, 0);
-
-            const typeText = this.add.text(screenCenterX, CourseText.y + CourseText.height + headerGap, `${this.selectedType}`, {
-                fontFamily: '"Press Start 2P"',
-                fontSize: "10px",
-                color: "#83c782",
-                align: "center",
-                resolution: 2
-            }).setOrigin(0.5, 0);
-
-            const dividerY = typeText.y + typeText.height + dividerGap;
+        const screenWidth = this.scale.width;
+        const screenHeight = this.scale.height;
+        const screenCenterX = screenWidth / 2;
+        const panelMargin = Math.min(24, screenWidth * 0.04, screenHeight * 0.04);
+        const panelWidth = Math.max(1, screenWidth - panelMargin * 6);
+        const panelX = (screenWidth - panelWidth) / 2;
+        const panelY = Math.max(90, panelMargin);
+        const panelHeight = Math.min(
+            300,
+            Math.max(130, screenHeight * 0.06) + (hasReferences ? 80 : 0),
+            screenHeight - panelY - panelMargin
+        );
+        const panelPadding = Math.min(28, Math.max(16, screenWidth * 0.025));
+        const headerTop = panelY + 18;
 
             const isRealQuestion = !isIdle 
                 && question !== null && question !== undefined
@@ -345,49 +329,110 @@ export default class Classroom extends Phaser.Scene {
             else if (question === null || question === undefined) { displayText = ""; }
             else if (isRealQuestion) {displayText = `Q${this.currentQuestionIndex + 1}: ${question}`; }
             else { displayText = question; } 
-                   
-            this.questionText = this.add.text(screenCenterX, dividerY + bodyTop + padding / 2, displayText, {
-                fontFamily: '"Press Start 2P"',
-                fontSize: "12px",
-                fill: "#ffffff",
-                align: "center",
-                wordWrap: { width: boxWidth - (padding * 2) },
-                lineSpacing: 10,
-                resolution: 2
-            }).setOrigin(0.5, 0);
 
-            const totalHeight = (dividerY - boxY) + bodyTop + padding / 2 + this.questionText.height + bottomPad;
-            this.headerBottom = boxY + totalHeight + verticalGap;
+        const courseText = this.add.text(screenCenterX, headerTop, this.selectedCourse, {
+            fontFamily: '"Press Start 2P"',
+            fontSize: "11px",
+            color: "#ffffff",
+            align: "center",
+            wordWrap: { width: panelWidth - panelPadding * 2 },
+            lineSpacing: 4,
+            resolution: 2
+        }).setOrigin(0.5, 0);
+        const typeText = this.add.text(screenCenterX, courseText.y + courseText.height + 10, this.selectedType, {
+            fontFamily: '"Press Start 2P"',
+            fontSize: "9px",
+            color: "#b7e4a8",
+            align: "center",
+            wordWrap: { width: panelWidth - panelPadding * 2 },
+            resolution: 2
+        }).setOrigin(0.5, 0);
 
-            const headerBg = this.add.graphics()
-                .fillStyle(0x344E41, 1)
-                .fillRoundedRect(screenCenterX - boxWidth / 2, boxY, boxWidth, dividerY - boxY, 10);
- 
-            const headerBgOverlap = this.add.graphics()
-                .fillStyle(0x344E41, 1)
-                .fillRect(screenCenterX - boxWidth / 2, dividerY - 10, boxWidth, 10);
-            
-            const dividerLine = this.add.graphics()
-                .lineBetween(
-                    screenCenterX - boxWidth / 2 + padding, dividerY,
-                    screenCenterX + boxWidth / 2 - padding, dividerY
-                );
+        const dividerY = typeText.y + typeText.height + 16;
+        const bodyTop = dividerY + 18;
+        const bodyHeight = Math.max(40, panelY + panelHeight - bodyTop - 20);
+        this.questionText = this.add.text(screenCenterX, bodyTop, displayText, {
+            fontFamily: '"Press Start 2P"',
+            fontSize: "11px",
+            fill: "#ffffff",
+            align: "center",
+            fixedWidth: panelWidth - panelPadding * 2,
+            wordWrap: { width: panelWidth - panelPadding * 2 },
+            lineSpacing: 8,
+            resolution: 2
+        }).setOrigin(0.5, 0);
 
-            this.questionContainerStyle = this.add.graphics()
-                .fillStyle(0x486947, 1)
-                .lineStyle(2, 0xA3B18A, 1)
-                .fillRoundedRect(screenCenterX - boxWidth / 2, boxY, boxWidth, totalHeight, 10)
-                .strokeRoundedRect(screenCenterX - boxWidth / 2, boxY, boxWidth, totalHeight, 10);
+        const maskGraphics = this.make.graphics({ x: 0, y: 0, add: false });
+        maskGraphics.fillRect(panelX + panelPadding, bodyTop, panelWidth - panelPadding * 2, bodyHeight);
+        this.questionMaskGraphics = maskGraphics;
+        this.questionText.setMask(maskGraphics.createGeometryMask());
+        this.questionScroll = {
+            top: bodyTop,
+            bottom: bodyTop + bodyHeight,
+            minY: bodyTop + bodyHeight - this.questionText.height,
+            maxY: bodyTop
+        };
+        this.questionPanelBounds = { top: panelY, bottom: panelY + panelHeight };
 
-        this.questionContainer.add([
-            this.questionContainerStyle,
-            headerBg,
-            headerBgOverlap,
-            dividerLine,
-            CourseText,
+        const panelGraphics = this.add.graphics()
+            .fillStyle(0x294235, 0.96)
+            .lineStyle(3, 0xa3b18a, 1)
+            .fillRoundedRect(panelX, panelY, panelWidth, panelHeight, 14)
+            .strokeRoundedRect(panelX, panelY, panelWidth, panelHeight, 14)
+            .fillStyle(0x344e41, 1)
+            .fillRoundedRect(panelX + 3, panelY + 3, panelWidth - 6, dividerY - panelY, 11)
+            .lineStyle(2, 0x83c782, 1)
+            .lineBetween(panelX + panelPadding, dividerY, panelX + panelWidth - panelPadding, dividerY);
+        this.questionContainer = this.add.container(0, 0, [
+            panelGraphics,
+            courseText,
             typeText,
             this.questionText
-        ]);
+        ]).setDepth(120);
+
+        if (this.questionText.height > bodyHeight) {
+            const scrollHint = this.add.text(panelX + panelWidth - panelPadding, panelY + panelHeight - 10, "SCROLL TO READ", {
+                fontFamily: '"Press Start 2P"',
+                fontSize: "6px",
+                color: "#b7e4a8",
+                align: "right",
+                resolution: 2
+            }).setOrigin(1, 1);
+            this.questionContainer.add(scrollHint);
+
+            this.questionWheelHandler = (pointer, gameObjects, deltaX, deltaY) => {
+                if (pointer.x < panelX || pointer.x > panelX + panelWidth
+                    || pointer.y < bodyTop || pointer.y > bodyTop + bodyHeight) return;
+                this.questionText.y = Phaser.Math.Clamp(
+                    this.questionText.y - deltaY * 0.5,
+                    this.questionScroll.minY,
+                    this.questionScroll.maxY
+                );
+            };
+            this.input.on('wheel', this.questionWheelHandler);
+
+            const pointerState = { active: false, lastY: 0 };
+            const pointerdown = pointer => {
+                pointerState.active = pointer.x >= panelX && pointer.x <= panelX + panelWidth
+                    && pointer.y >= bodyTop && pointer.y <= bodyTop + bodyHeight;
+                pointerState.lastY = pointer.y;
+            };
+            const pointermove = pointer => {
+                if (!pointerState.active || !pointer.isDown) return;
+                this.questionText.y = Phaser.Math.Clamp(
+                    this.questionText.y + pointer.y - pointerState.lastY,
+                    this.questionScroll.minY,
+                    this.questionScroll.maxY
+                );
+                pointerState.lastY = pointer.y;
+            };
+            const pointerup = () => { pointerState.active = false; };
+            this.questionScrollHandlers = { pointerdown, pointermove, pointerup };
+            this.input.on('pointerdown', pointerdown);
+            this.input.on('pointermove', pointermove);
+            this.input.on('pointerup', pointerup);
+            this.input.on('pointerupoutside', pointerup);
+        }
     }
 
     disableAllOptions() {
@@ -405,7 +450,7 @@ export default class Classroom extends Phaser.Scene {
 
         this.optionButtons.forEach(btn => {
             if (!btn.graphics || !btn.graphics.scene) return;
-            const hitArea = new Phaser.Geom.Rectangle(0, 0, btn.w, btn.h);
+            const hitArea = new Phaser.Geom.Rectangle(-btn.w / 2, -btn.h / 2, btn.w, btn.h);
             btn.graphics.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains);
             btn.container.setAlpha(1);
         });
@@ -420,155 +465,182 @@ export default class Classroom extends Phaser.Scene {
         const screenHeight = this.scale.height;
         const screenWidth = this.scale.width;
         const isAssessment = this.rawType === 'Skill' || this.rawType === 'Personality';
+        const horizontalGap = 14;
+        const verticalGap = 12;
+        const sideMargin = 28;
+        const columns = isAssessment ? Math.min(3, Math.max(1, options.length)) : Math.min(2, Math.max(1, options.length));
+        const buttonWidth = isAssessment
+            ? Math.min(240, (screenWidth - sideMargin * 2 - horizontalGap * 2) / 3)
+            : Math.min(520, (screenWidth - sideMargin * 2 - horizontalGap) / 2);
+        const rows = [];
+        const optionItems = [];
 
-        if (isAssessment) {
-            this.optionsContainer = this.add.container(screenWidth / 2, screenHeight - 190).setDepth(130);
-        
-            const paddingSide = 24;
-            const paddingTopBottom = 14;
-            const maxWidth = 300;
+        options.forEach((optionText, index) => {
+            const label = String.fromCharCode(65 + index);
+            const displayText = isAssessment || optionText === "Retry" ? optionText : `${label}. ${optionText}`;
+            const text = this.add.text(0, 0, displayText, {
+                fontFamily: '"Press Start 2P"',
+                fontSize: "8px",
+                align: "center",
+                fill: "#ffffff",
+                wordWrap: { width: buttonWidth - 36 },
+                lineSpacing: 6,
+                resolution: 2
+            }).setOrigin(0.5);
+            const item = { optionText, text };
+            optionItems.push(item);
+            const rowIndex = Math.floor(index / columns);
+            if (!rows[rowIndex]) rows[rowIndex] = [];
+            rows[rowIndex].push(item);
+        });
 
-            this.optionButtons = [];
+        rows.forEach(row => {
+            row.height = Math.max(...row.map(item => item.text.height)) + 28;
+        });
+        const availableTop = (this.questionPanelBounds?.bottom || screenHeight * 0.45) + 20;
+        const availableBottom = screenHeight - 36;
+        const availableHeight = availableBottom - availableTop;
+        this.optionsContainer = this.add.container(screenWidth / 2, 0).setDepth(130);
 
-            options.forEach((optionText) => {
-                let offsetX = 0;
-                let offsetY = 0;
-
-                const textCheck = optionText.toUpperCase().trim();
-                if (textCheck.includes("STRONGLY DISAGREE")) { offsetX = 105; offsetY = 50; }
-                else if (textCheck.includes("STRONGLY AGREE")) { offsetX = -105; offsetY = -50; }
-                else if (textCheck.includes("DISAGREE")) { offsetX = -105; offsetY = 50; }
-                else if (textCheck.includes("AGREE")) { offsetX = 105; offsetY = -50; }
-                else if (textCheck.includes("NEUTRAL")) { offsetX = 0; offsetY: 0; }
-                else { offsetX = 0; offsetY = 0; }
-
-                const optionsText = this.add.text(0, 0, optionText, {
-                    fontFamily: '"Press Start 2P"',
-                    fontSize: "8px",
-                    align: "center",
-                    fill: "#ffffff",
-                    wordWrap: { width: maxWidth - (paddingSide * 2) },
-                    resolution: 2
-                }).setOrigin(0.5);
-
-                const finalWidth = 200;
-                const finalHeight = optionsText.height + (paddingTopBottom * 2);
-
-                const optionsStyleContainer = this.add.graphics()
-                    .fillStyle(0x486947, 1)
-                    .lineStyle(2, 0xA3B18A, 1)
-                    .fillRoundedRect(-finalWidth / 2, -finalHeight / 2, finalWidth, finalHeight, 8)
-                    .strokeRoundedRect(-finalWidth / 2, -finalHeight / 2, finalWidth, finalHeight, 8);
-
-                const hitArea = new Phaser.Geom.Rectangle(-finalWidth / 2, -finalHeight / 2, finalWidth, finalHeight);    
-                optionsStyleContainer.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains)
-                    .on('pointerover', () => {
-                        if (!this.isSettingsOpen && !this.isLoadingQuestions) optionsStyleContainer.setAlpha(0.8);
-                    })
-                    .on('pointerout', () => optionsStyleContainer.setAlpha(1))
-                    .on('pointerdown', () => {
-                        if (this.isSettingsOpen || this.isLoadingQuestions) return;
-
-                        if (optionText === "Retry") {
-                            this.loadQuestions();
-                        } else {
-                            this.handleAnswer(optionText);
-                        }
-                    });
-
-                const buttonContainer = this.add.container(offsetX, offsetY, [optionsStyleContainer, optionsText]);
-                this.optionsContainer.add(buttonContainer);
-                this.optionButtons.push({ container: buttonContainer, graphics: optionsStyleContainer, text: optionText, w: finalWidth, h: finalHeight });
-            });
-            this.highlightOption(this.selectedOptionIndex);
-        } else {          
-            this.optionsContainer = this.add.container(120, 0).setDepth(130);
-
-            let currentY = 0;
-            const verticalGap = 10;
-            const paddingSide = 24;
-            const paddingTopBottom = 14;
-            const maxWidth = 700;
-            const startX = 250;
-            const offsetStep = 50;
-
-            this.optionButtons = [];
-
-            options.forEach((optionText, index) => {
-                const label = String.fromCharCode(65 + index);
-                const currentX = startX - (index * offsetStep);
-
-                const displayText = optionText === "Retry" ? optionText : `${label}. ${optionText}`;
-
-                const optionsText = this.add.text(0, 0, displayText, {
-                    fontFamily: '"Press Start 2P"',
-                    fontSize: "8px",
-                    align: "center",
-                    fill: "#ffffff",
-                    wordWrap: { width: maxWidth - (paddingSide * 2) },
-                    lineSpacing: 6,
-                    resolution: 2
-                }).setOrigin(0.5);
-
-                const finalWidth = optionsText.width + (paddingSide * 2);
-                const finalHeight = optionsText.height + (paddingTopBottom * 2);
-
-                optionsText.setPosition(finalWidth / 2, finalHeight / 2);
-
-                const optionsStyleContainer = this.add.graphics()
-                    .fillStyle(0x344E41, 1)
-                    .lineStyle(2, 0xA3B18A, 1)
-                    .fillRoundedRect(0, 0, finalWidth, finalHeight, 8)
-                    .strokeRoundedRect(0, 0, finalWidth, finalHeight, 8);
-
-                const hitArea = new Phaser.Geom.Rectangle(0, 0, finalWidth, finalHeight);    
-                optionsStyleContainer.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains)
-                    .on('pointerover', () => {
-                        if (!this.isSettingsOpen && !this.isLoadingQuestions) optionsStyleContainer.setAlpha(0.8);
-                    })
-                    .on('pointerout', () => optionsStyleContainer.setAlpha(1))
-                    .on('pointerdown', () => {
-                        if (this.isSettingsOpen || this.isLoadingQuestions) return;
-
-                        if (optionText === "Retry") {
-                            this.loadQuestions();
-                        } else {
-                            this.handleAnswer(optionText);
-                        }
-                    });
-
-                const buttonContainer = this.add.container(currentX, currentY, [optionsStyleContainer, optionsText]);
-                this.optionsContainer.add(buttonContainer);
-                currentY += finalHeight + verticalGap;
-                this.optionButtons.push({ container: buttonContainer, graphics: optionsStyleContainer, text: optionText, w: finalWidth, h: finalHeight });
-            });
-            this.optionsContainer.y = screenHeight - currentY - 80;
-            this.highlightOption(this.selectedOptionIndex);
+        const personalitySlots = new Map([
+            ['strongly agree', { row: 'top', column: 0 }],
+            ['neutral', { row: 'top', column: 1 }],
+            ['strongly disagree', { row: 'top', column: 2 }],
+            ['agree', { row: 'bottom', column: 0 }],
+            ['disagree', { row: 'bottom', column: 1 }]
+        ]);
+        const personalityLayout = this.rawType === 'Personality'
+            && optionItems.length === personalitySlots.size
+            && new Set(optionItems.map(item => item.optionText.trim().toLowerCase())).size === personalitySlots.size
+            && optionItems.every(item => personalitySlots.has(item.optionText.trim().toLowerCase()));
+        if (personalityLayout) {
+            this.selectedOptionIndex = optionItems.findIndex(
+                item => item.optionText.trim().toLowerCase() === 'neutral'
+            );
         }
+        const positions = new Map();
+
+        if (personalityLayout) {
+            const groups = { top: [], bottom: [] };
+            optionItems.forEach(item => {
+                groups[personalitySlots.get(item.optionText.trim().toLowerCase()).row].push(item);
+            });
+            const groupHeights = {
+                top: Math.max(...groups.top.map(item => item.text.height)) + 28,
+                bottom: Math.max(...groups.bottom.map(item => item.text.height)) + 28
+            };
+            const totalHeight = groupHeights.top + groupHeights.bottom + verticalGap;
+            const startY = availableTop + Math.max(0, (availableHeight - totalHeight) / 2);
+            const centers = {
+                top: startY + groupHeights.top / 2,
+                bottom: startY + groupHeights.top + verticalGap + groupHeights.bottom / 2
+            };
+            const topStartX = -buttonWidth - horizontalGap;
+            const bottomStartX = -(buttonWidth + horizontalGap) / 2;
+
+            optionItems.forEach(item => {
+                const { row, column } = personalitySlots.get(item.optionText.trim().toLowerCase());
+                const x = row === 'top'
+                    ? topStartX + column * (buttonWidth + horizontalGap)
+                    : bottomStartX + column * (buttonWidth + horizontalGap);
+                positions.set(item, { x, y: centers[row], height: groupHeights[row] });
+            });
+        } else {
+            const totalHeight = rows.reduce((height, row) => height + row.height, 0)
+                + Math.max(0, rows.length - 1) * verticalGap;
+            let rowY = availableTop + Math.max(0, (availableHeight - totalHeight) / 2);
+            rows.forEach((row, rowIndex) => {
+                const rowWidth = row.length * buttonWidth + (row.length - 1) * horizontalGap;
+                row.forEach((item, columnIndex) => {
+                    const x = -rowWidth / 2 + buttonWidth / 2 + columnIndex * (buttonWidth + horizontalGap);
+                    positions.set(item, { x, y: rowY + row.height / 2, height: row.height });
+                });
+                rowY += row.height + (rowIndex < rows.length - 1 ? verticalGap : 0);
+            });
+        }
+
+        optionItems.forEach(item => {
+            const position = positions.get(item);
+            const buttonGraphics = this.add.graphics()
+                .fillStyle(0x344e41, 1)
+                .lineStyle(2, 0xa3b18a, 1)
+                .fillRoundedRect(-buttonWidth / 2, -position.height / 2, buttonWidth, position.height, 10)
+                .strokeRoundedRect(-buttonWidth / 2, -position.height / 2, buttonWidth, position.height, 10);
+            const hitArea = new Phaser.Geom.Rectangle(-buttonWidth / 2, -position.height / 2, buttonWidth, position.height);
+            buttonGraphics.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains)
+                .on('pointerover', () => {
+                    if (!this.isSettingsOpen && !this.isLoadingQuestions) buttonGraphics.setAlpha(0.8);
+                })
+                .on('pointerout', () => buttonGraphics.setAlpha(1))
+                .on('pointerdown', () => {
+                    if (this.isSettingsOpen || this.isLoadingQuestions) return;
+                    if (item.optionText === "Retry") this.loadQuestions();
+                    else this.handleAnswer(item.optionText);
+                });
+
+            const buttonContainer = this.add.container(position.x, position.y, [buttonGraphics, item.text]);
+            this.optionsContainer.add(buttonContainer);
+            this.optionButtons.push({
+                container: buttonContainer,
+                graphics: buttonGraphics,
+                text: item.optionText,
+                w: buttonWidth,
+                h: position.height
+            });
+        });
+        this.highlightOption(this.selectedOptionIndex);
     }
 
     highlightOption(index) {
         if (!this.optionButtons || this.optionButtons.length === 0) return;
-        const isAssessment = this.rawType === 'Skill' || this.rawType === 'Personality';
-
         this.optionButtons.forEach((btn, i) => {
             btn.graphics.clear();
             const isSelected = i === index;
+            btn.graphics
+                .fillStyle(isSelected ? 0x588157 : 0x344e41, 1)
+                .lineStyle(2, isSelected ? 0xffffff : 0xa3b18a, 1)
+                .fillRoundedRect(-btn.w / 2, -btn.h / 2, btn.w, btn.h, 10)
+                .strokeRoundedRect(-btn.w / 2, -btn.h / 2, btn.w, btn.h, 10);
+        });
+    }
 
-            if (isAssessment) {
-                btn.graphics
-                    .fillStyle(isSelected ? 0x588157 : 0x486947, 1)
-                    .lineStyle(2, isSelected ? 0xffffff : 0xA3B18A, 1)
-                    .fillRoundedRect(-btn.w / 2, -btn.h / 2, btn.w, btn.h, 8)
-                    .strokeRoundedRect(-btn.w / 2, -btn.h / 2, btn.w, btn.h, 8);
-            } else {
-                btn.graphics
-                    .fillStyle(isSelected ? 0x588157 : 0x344E41, 1)
-                    .lineStyle(2, isSelected ? 0xffffff : 0xA3B18A, 1)
-                    .fillRoundedRect(0, 0, btn.w, btn.h, 8)
-                    .strokeRoundedRect(0, 0, btn.w, btn.h, 8);
+    moveOptionSelection(direction) {
+        if (!this.optionButtons || this.optionButtons.length < 2) return;
+
+        const current = this.optionButtons[this.selectedOptionIndex];
+        if (!current) return;
+
+        const currentBounds = current.container.getBounds();
+        const currentX = currentBounds.centerX;
+        const currentY = currentBounds.centerY;
+        let nearestIndex = this.selectedOptionIndex;
+        let nearestScore = Infinity;
+
+        this.optionButtons.forEach((button, index) => {
+            if (index === this.selectedOptionIndex) return;
+
+            const bounds = button.container.getBounds();
+            const deltaX = bounds.centerX - currentX;
+            const deltaY = bounds.centerY - currentY;
+            const primaryDistance = direction === 'left' ? -deltaX
+                : direction === 'right' ? deltaX
+                    : direction === 'up' ? -deltaY : deltaY;
+            if (primaryDistance <= 0) return;
+
+            const secondaryDistance = direction === 'left' || direction === 'right'
+                ? Math.abs(deltaY)
+                : Math.abs(deltaX);
+            const score = primaryDistance + secondaryDistance * 2;
+            if (score < nearestScore) {
+                nearestScore = score;
+                nearestIndex = index;
             }
         });
+
+        if (nearestIndex !== this.selectedOptionIndex) {
+            this.selectedOptionIndex = nearestIndex;
+            this.highlightOption(nearestIndex);
+        }
     }
 
     startThinkingAnimation() {
@@ -705,7 +777,7 @@ export default class Classroom extends Phaser.Scene {
                 const expParts = [currentQ.explanation || ""];
                 if (currentQ.source) expParts.push(`Source: ${currentQ.source}`);
                 if (currentQ.url) expParts.push(`${currentQ.url}`);
-                this.questionUI(expParts.join("\n\n"));
+                this.questionUI(expParts.join("\n\n"), Boolean(currentQ.source || currentQ.url));
             });
             this.time.delayedCall(delayTimer + 15000, () => { this.cleanupAndNext(); });
         }
@@ -868,35 +940,31 @@ export default class Classroom extends Phaser.Scene {
         if (!this.mobileControls) return; 
 
         if (this.optionButtons && this.optionButtons.length > 0 && !this.isAnswering && this.currentOptions.length > 0 && !this.isLoadingQuestions) {
-            const isAssessment = this.rawType === 'Skill' || this.rawType === 'Personality';
             const upJustDown =
                 Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP)) ||
                 Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)) ||
                 (this.mobileControls.isDpadUpJustDown ? this.mobileControls.isDpadUpJustDown() : false);
-
             const downJustDown =
                 Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN)) ||
                 Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)) ||
                 (this.mobileControls.isDpadDownJustDown ? this.mobileControls.isDpadDownJustDown() : false);
-
+            const leftJustDown =
+                Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT)) ||
+                Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)) ||
+                (this.mobileControls.isDpadLeftJustDown ? this.mobileControls.isDpadLeftJustDown() : false);
+            const rightJustDown =
+                Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)) ||
+                Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)) ||
+                (this.mobileControls.isDpadRightJustDown ? this.mobileControls.isDpadRightJustDown() : false);
             const confirmJustDown =
                 Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)) ||
                 Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)) ||
                 this.mobileControls.isInteractJustDown();
 
-            if (upJustDown) {
-                this.selectedOptionIndex = isAssessment
-                    ? (this.selectedOptionIndex + 1) % this.currentOptions.length
-                    : (this.selectedOptionIndex - 1 + this.currentOptions.length) % this.currentOptions.length;
-                this.highlightOption(this.selectedOptionIndex);
-            }
-
-            if (downJustDown) {
-                this.selectedOptionIndex = isAssessment
-                    ? (this.selectedOptionIndex - 1 + this.currentOptions.length) % this.currentOptions.length
-                    : (this.selectedOptionIndex + 1) % this.currentOptions.length;
-                this.highlightOption(this.selectedOptionIndex);
-            }
+            if (upJustDown) this.moveOptionSelection('up');
+            if (downJustDown) this.moveOptionSelection('down');
+            if (leftJustDown) this.moveOptionSelection('left');
+            if (rightJustDown) this.moveOptionSelection('right');
 
             if (confirmJustDown || this.isLoadingQuestions) {
                 const selected = this.currentOptions[this.selectedOptionIndex];
