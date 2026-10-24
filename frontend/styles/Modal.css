@@ -1,30 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Micro+5&family=Pixelify+Sans:wght@400..700&display=swap');
 
-.modalBackdrop, .modalBackdrop.resultBackdrop {
+.modalBackdrop {
     position: fixed;
     inset: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
     background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(1vmin);
+    backdrop-filter: blur(0.5rem);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 
     .modalContainer {
-        border: 1vmin solid #dad7cd;
+        box-sizing: border-box;
+        border: clamp(6px, 0.8vmin, 14px) solid #dad7cd;
         background-color: var(--color-green-main);
-        margin: 1rem;
-        width: 150vmin;
-        height: 70vmin;
+        width: 100%;
+        height: 100dvh;
+        margin: 8vmin;
         image-rendering: pixelated;
         z-index: 1001;
+        overflow: hidden;
 
         .modalContent {
             position: relative;
             overflow-y: auto;
             overflow-x: hidden;
-            height: 70vmin;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+            box-sizing: border-box;
+            height: 100%;
             width: 100%;
+            min-height: 0;
             font-family: "Press Start 2P";
             font-size: clamp(10px, 2vmin, 18px);
             line-height: 1.5;
@@ -33,15 +41,15 @@
 
             #closeButton {
                 position: absolute;
-                top: 2.4vmin;
-                right: 3vmin;
+                top: clamp(10px, 2.4vmin, 24px);
+                right: clamp(10px, 3vmin, 30px);
                 background: #ff4444;
                 color: #fff;
-                border: 0.5vmin solid #fff;
-                padding: 1vmin 2vmin;
+                border: clamp(2px, 0.5vmin, 5px) solid #fff;
+                padding: clamp(6px, 1vmin, 12px) clamp(10px, 2vmin, 20px);
                 cursor: pointer;
                 font-family: "Press Start 2P";
-                font-size: 3vmin;
+                font-size: clamp(12px, 2vmin, 18px);
                 z-index: 1005;
 
                 &:hover{
