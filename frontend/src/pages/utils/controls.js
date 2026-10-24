@@ -4,6 +4,8 @@ export function createMobileControls(scene) {
     const state = { forceX: 0, forceY: 0, interactPressed: false, isRunning: false };
     let lastUpState = false;
     let lastDownState = false;
+    let lastLeftState = false;
+    let lastRightState = false;
 
     const idleAlpha = 0.5;
     const activeAlpha = 1.0;
@@ -120,6 +122,18 @@ export function createMobileControls(scene) {
             const isPressed = state.forceY === 1;
             const justPressed = isPressed && !lastDownState;
             lastDownState = isPressed;
+            return justPressed;
+        },
+        isDpadLeftJustDown: () => {
+            const isPressed = state.forceX === -1;
+            const justPressed = isPressed && !lastLeftState;
+            lastLeftState = isPressed;
+            return justPressed;
+        },
+        isDpadRightJustDown: () => {
+            const isPressed = state.forceX === 1;
+            const justPressed = isPressed && !lastRightState;
+            lastRightState = isPressed;
             return justPressed;
         },
         isInteractJustDown: () => {

@@ -1,7 +1,7 @@
 export function createKeyboardHints(scene, mode = 'world') {
     const lines = mode === 'classroom'
         ? [
-            'SELECT: UP / W, DOWN / S',
+            'SELECT: W / A / S / D OR ARROWS',
             'ANSWER: [ENTER] / [SPACE]'
         ]
         : [
