@@ -186,36 +186,36 @@ export default class LeftWing extends Phaser.Scene {
 
         this.hintLabel = this.add.container(0, 0).setVisible(false).setDepth(20);
         this.hintBubble = this.add.graphics();
-            this.hintPart1 = this.add.text(0, 0, "", {
-                fontFamily: '"Press Start 2P"',
-                fontSize: "10px",
-                fill: "#ffffff"
-            }).setOrigin(0, 0.5);
+        this.hintPart1 = this.add.text(0, 0, "", {
+            fontFamily: '"Press Start 2P"',
+            fontSize: "10px",
+            fill: "#ffffff"
+        }).setOrigin(0, 0.5);
 
-            this.hintPart2 = this.add.text(0, 20, "", {
-                fontFamily: '"Press Start 2P"',
-                fontSize: "10px",
-                fill: "#ffffff"
-            }).setOrigin(0, 0.5);
+        this.hintPart2 = this.add.text(0, 20, "", {
+            fontFamily: '"Press Start 2P"',
+            fontSize: "10px",
+            fill: "#ffffff"
+        }).setOrigin(0, 0.5);
 
-            this.menuHeader = this.add.text(0, 0, "SELECT ACTION:", {
-                fontFamily: '"Press Start 2P"', 
-                fontSize: "10px", 
-                fill: "#ffffff"
-            }).setVisible(false);
+        this.menuHeader = this.add.text(0, 0, "SELECT ACTION:", {
+            fontFamily: '"Press Start 2P"',
+            fontSize: "10px",
+            fill: "#ffffff"
+        }).setVisible(false);
 
-            this.menuPointer = this.add.text(0, 0, "<", { 
-                fontFamily: '"Press Start 2P"', 
-                fontSize: "10px", 
-                fill: "#80ff60"
-            }).setVisible(false);
+        this.menuPointer = this.add.text(0, 0, "<", {
+            fontFamily: '"Press Start 2P"',
+            fontSize: "10px",
+            fill: "#80ff60"
+        }).setVisible(false);
         this.hintLabel.add([this.hintBubble, this.hintPart1, this.hintPart2, this.menuHeader, this.menuPointer]);
 
         this.menuTextObjects = [];
         this.menuOptions.forEach((opt, i) => {
-            let txt = this.add.text(0, i * 25 + 35, opt.text, { 
-                fontFamily: '"Press Start 2P"', 
-                fontSize: "10px", 
+            let txt = this.add.text(0, i * 25 + 35, opt.text, {
+                fontFamily: '"Press Start 2P"',
+                fontSize: "10px",
                 fill: "#ffffff"
             });
             this.menuTextObjects.push(txt);
@@ -334,7 +334,7 @@ export default class LeftWing extends Phaser.Scene {
                 } else {
                     if (this.activeZone.target === 'Hallway') {
                         if (!this.playerName || this.playerName === 'Guest') {
-                            this.showBlockedHint("GO TO DASHBOARD AND CREATE\nPROFILE AND PERSONALIZATION\nFIRST BEFORE ENTERING!");
+                            this.showBlockedHint();
                             return;
                         }
                     }
@@ -351,28 +351,8 @@ export default class LeftWing extends Phaser.Scene {
         this.isMenuOpen ? this.renderMenu() : this.renderStandardHint();
     }
 
-    showBlockedHint(message) {
-        if (this.blockedHintText) this.blockedHintText.destroy();
-
-        this.blockedHintText = this.add.text(
-            this.player.x - 120, this.player.y - 100, message, {
-                fontFamily: '"Press Start 2P"',
-                fontSize: "10px",
-                fill: "#ffa5a5",
-                align: "center",
-                backgroundColor: "#125729",
-                padding: { x: 12, y: 8 },
-                lineHeight: 4,
-                resolution: 2
-            }
-        ).setOrigin(0.5).setDepth(200);
-
-        this.time.delayedCall(5000, () => {
-            if (this.blockedHintText) {
-                this.blockedHintText.destroy();
-                this.blockedHintText = null;
-            }
-        });
+    showBlockedHint() {
+        window.dispatchEvent(new CustomEvent('openProfileSetupHintModal'));
     }
 
     renderStandardHint(){
@@ -408,8 +388,8 @@ export default class LeftWing extends Phaser.Scene {
             .clear()
             .fillStyle(0x125729, 0.9)
             .lineStyle(4, 0xffffff, 1)
-            .fillRoundedRect(-20, -15, 200, 125, 10)
-            .strokeRoundedRect(-20, -15, 200, 125, 10);
+            .fillRoundedRect(-20, -15, 200, 35 + this.menuOptions.length * 30, 10)
+            .strokeRoundedRect(-20, -15, 200, 35 + this.menuOptions.length * 30, 10);
 
         this.hintPart1.setVisible(!isMenu);
         this.hintPart2.setVisible(!isMenu);
@@ -420,7 +400,6 @@ export default class LeftWing extends Phaser.Scene {
                 txt.setVisible(true);
                 const isSelected = (i === this.menuIndex);
                 const isCancel = this.menuOptions[i].target === "cancel";
-
                 if (isSelected) {
                     txt.setFill(isCancel ? "#ff5555" : "#80ff60");
                     this.menuPointer.setFill(isCancel ? "#ff5555" : "#80ff60");

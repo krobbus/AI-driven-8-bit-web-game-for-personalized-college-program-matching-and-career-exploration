@@ -199,6 +199,7 @@ export default class Outdoor extends Phaser.Scene {
         this.keyboardHints = createKeyboardHints(this);
         this.createUIElements();
         this.updateMobileUI();
+        window.dispatchEvent(new CustomEvent('openProfileSetupHintModal'));
     }
 
     createUIElements(){
@@ -312,7 +313,7 @@ export default class Outdoor extends Phaser.Scene {
                 } else {
                     if (this.activeZone.target === 'RightWing') {
                         if (!this.playerName || this.playerName === 'Guest') {
-                            this.showBlockedHint("ENTER THE MAIN DOOR AND CREATE\nPROFILE AND PERSONALIZATION FIRST!");
+                            this.showBlockedHint();
                             return;
                         }
                     }
@@ -349,28 +350,8 @@ export default class Outdoor extends Phaser.Scene {
         }
     }
 
-    showBlockedHint(message) {
-        if (this.blockedHintText) this.blockedHintText.destroy();
-
-        this.blockedHintText = this.add.text(
-            this.player.x - 50, this.player.y - 90, message, {
-                fontFamily: '"Press Start 2P"',
-                fontSize: "10px",
-                fill: "#ffa5a5",
-                align: "center",
-                backgroundColor: "#125729",
-                padding: { x: 12, y: 8 },
-                lineHeight: 4,
-                resolution: 2
-            }
-        ).setOrigin(0.5).setDepth(200);
-
-        this.time.delayedCall(5000, () => {
-            if (this.blockedHintText) {
-                this.blockedHintText.destroy();
-                this.blockedHintText = null;
-            }
-        });
+    showBlockedHint() {
+        window.dispatchEvent(new CustomEvent('openProfileSetupHintModal'));
     }
 
     applyStairPhysics(isRunning) {
