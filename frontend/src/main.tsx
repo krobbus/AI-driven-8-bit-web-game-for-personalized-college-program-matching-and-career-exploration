@@ -16,6 +16,7 @@ const AccountManagement = lazy(() => import('./components/AccountManagement'));
 const Dashboard = lazy(() => import('./components/Dashboard'));
 const Leaderboard = lazy(() => import('./components/Leaderboard'));
 const Result = lazy(() => import('./components/Result'));
+const ProfileSetupHint = lazy(() => import('./components/ProfileSetupHint'));
 
 declare global {
   interface Window {
@@ -57,6 +58,7 @@ const UIOverlay = () => {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [isResultOpen, setIsResultOpen] = useState(false);
+  const [isProfileSetupHintOpen, setIsProfileSetupHintOpen] = useState(false);
   const [resultData, setResultData] = useState<{
     results: any[];
     rawType: string;
@@ -65,9 +67,6 @@ const UIOverlay = () => {
   }>({ results: [], rawType: '', courseCode: '' });
 
   useEffect(() => {
-    const game = new Phaser.Game(config);
-    window.game = game;
-
     let titleInterval: ReturnType<typeof setInterval>;
 
     const handleUpdateTitle = (e: any) => {
@@ -86,6 +85,7 @@ const UIOverlay = () => {
     const handleOpenAccountManagementModal = () => setIsAccountManagementOpen(true);
     const handleOpenDashboardModal = () => setIsDashboardOpen(true);
     const handleOpenLeaderboardModal = () => setIsLeaderboardOpen(true);
+    const handleOpenProfileSetupHintModal = () => setIsProfileSetupHintOpen(true);
     const handleOpenResultModal = (e: Event) => {
       const custom = e as CustomEvent;
       console.log('openResultModal fired', custom.detail);
@@ -98,7 +98,11 @@ const UIOverlay = () => {
     window.addEventListener('openAccountManagementModal', handleOpenAccountManagementModal);
     window.addEventListener('openDashboardModal', handleOpenDashboardModal);
     window.addEventListener('openLeaderboardModal', handleOpenLeaderboardModal);
+    window.addEventListener('openProfileSetupHintModal', handleOpenProfileSetupHintModal);
     window.addEventListener('openResultModal', handleOpenResultModal);
+
+    const game = new Phaser.Game(config);
+    window.game = game;
 
     return () => {
       game.destroy(true);
@@ -110,6 +114,7 @@ const UIOverlay = () => {
       window.removeEventListener('openAccountManagementModal', handleOpenAccountManagementModal);
       window.removeEventListener('openDashboardModal', handleOpenDashboardModal);
       window.removeEventListener('openLeaderboardModal', handleOpenLeaderboardModal);
+      window.removeEventListener('openProfileSetupHintModal', handleOpenProfileSetupHintModal);
       window.removeEventListener('openResultModal', handleOpenResultModal);
     };
   }, []);
@@ -148,6 +153,11 @@ const UIOverlay = () => {
         rawType={resultData.rawType}
         courseCode={resultData.courseCode}
         source={resultData.source ?? 'classroom'}
+      />
+
+      <ProfileSetupHint
+        isOpen={isProfileSetupHintOpen}
+        onClose={() => setIsProfileSetupHintOpen(false)}
       />
     </Suspense>
   );
