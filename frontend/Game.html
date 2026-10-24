@@ -6,6 +6,35 @@
     <title>Outdoor - An AI-Driven 8-bit Web Game For Personalized College Program Matching and Career Exploration</title>
     <link rel="icon" type="image/x-icon" href="Logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        #rotate-warning {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            padding: 24px;
+            background: #000;
+            color: #fff;
+            text-align: center;
+            font-family: "Jersey 10", sans-serif;
+            font-size: 3.8vmin;
+            letter-spacing: 0.2vmin;
+        }
+
+        #rotate-warning p {
+            max-width: 720px;
+        }
+
+        @media (orientation: portrait) {
+            html body #rotate-warning {
+                display: flex;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -21,15 +50,7 @@
     <script type="module" src="./src/main.tsx"></script>
 
     <script>
-        window.addEventListener('resize', () => {                   
-            const warning = document.getElementById("rotate-warning");
-            
-            if (window.innerHeight > window.innerWidth) {
-                warning.style.display = "flex";
-            } else {
-                warning.style.display = "none";
-            }
-
+        window.addEventListener('resize', () => {
             if (window.game && window.game.scale) { 
                 setTimeout(() => {
                     window.game.scale.refresh();

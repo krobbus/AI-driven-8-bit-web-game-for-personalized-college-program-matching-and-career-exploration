@@ -31,23 +31,6 @@ html, body {
   box-sizing: border-box;
 }
 
-#rotate-warning{
-  position: fixed;
-  inset: 0;
-  background: #000;
-  z-index: 9999;
-  display: none;
-  flex-direction: column;               
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-xl);
-  color: #fff;
-  font-family: "Jersey 10";
-  font-size: 3.8vmin;
-  letter-spacing: 0.2vmin;
-}
-
 #game-container {
   width: 100vw;
   height: 100vh;
