@@ -3,6 +3,7 @@ import Player from '/src/pages/prefabs/player.js';
 import NPC from '/src/pages/prefabs/npc.js';
 import DialogueBubble from '/src/pages/prefabs/dialoguebubble.js';
 import { createMobileControls } from '/src/pages/utils/controls.js';
+import { createKeyboardHints } from '/src/pages/utils/keyboardHints.js';
 import Settings from '/src/pages/prefabs/settings.js';
 
 export default class Hallway extends Phaser.Scene {
@@ -228,6 +229,7 @@ export default class Hallway extends Phaser.Scene {
         } else { this.isMobileMode = savedMode === 'true'; }
         
         this.mobileControls = createMobileControls(this);
+        this.keyboardHints = createKeyboardHints(this);
         this.createUIElements();
         this.updateMobileUI();
 
@@ -480,7 +482,10 @@ export default class Hallway extends Phaser.Scene {
         this.hintLabel.setVisible(true);
     }
 
-    updateMobileUI() { this.mobileControls.setVisible(this.isMobileMode); }
+    updateMobileUI() {
+        this.mobileControls.setVisible(this.isMobileMode);
+        this.keyboardHints.setVisible(!this.isMobileMode);
+    }
     toggleSettings() { this.settingsPanel.setVisible(!this.settingsPanel.visible); }
 
     startPageTransition(targetSceneName, lastPosition, courseName, typeName){

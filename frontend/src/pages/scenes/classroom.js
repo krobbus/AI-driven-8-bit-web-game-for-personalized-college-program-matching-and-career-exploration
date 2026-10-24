@@ -1,5 +1,6 @@
 import { db } from '../../config/firebase';
 import { createMobileControls } from '/src/pages/utils/controls.js';
+import { createKeyboardHints } from '/src/pages/utils/keyboardHints.js';
 import Settings from '/src/pages/prefabs/settings.js';
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -138,6 +139,7 @@ export default class Classroom extends Phaser.Scene {
         } else { this.isMobileMode = savedMode === 'true'; }
         
         this.mobileControls = createMobileControls(this);
+        this.keyboardHints = createKeyboardHints(this, 'classroom');
         this.updateMobileUI();
         this.classroomAnims();
         this.showStartScreen();
@@ -903,7 +905,10 @@ export default class Classroom extends Phaser.Scene {
         }
     }
     
-    updateMobileUI() { this.mobileControls.setVisible(this.isMobileMode); }
+    updateMobileUI() {
+        this.mobileControls.setVisible(this.isMobileMode);
+        this.keyboardHints.setVisible(!this.isMobileMode);
+    }
     toggleSettings() { this.settingsPanel.setVisible(!this.settingsPanel.visible); }
 
     startPageTransition(targetSceneName, lastPosition) {
