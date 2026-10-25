@@ -32,6 +32,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.nameContainer = scene.add.container(x, y - 40);
         this.nameContainer.add([this.nameBg, this.nameText]);
         this.nameContainer.setDepth(100);
+        this.nameContainer.setVisible(localStorage.getItem('hideName') !== 'true');
 
         this.cursors = scene.input.keyboard.createCursorKeys();
         this.keys = scene.input.keyboard.addKeys('W,A,S,D,SHIFT');
