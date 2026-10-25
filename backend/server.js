@@ -9,7 +9,8 @@ const PORT = process.env.PORT || 10000;
 
 const corsOptions = {
   origin: [
-    "https://krobbus.github.io",
+    "https://ai-driven-8-bit-web-game.vercel.app",
+    "https://ai-driven-8-bit-web-game-for.onrender.com",
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://127.0.0.1:10000",

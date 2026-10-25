@@ -2,9 +2,11 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const base = process.env.VERCEL ? '/' : '/8-Bit/';
+
 export default defineConfig({
   plugins: [react()],
-  base: '/8-Bit/',
+  base,
   server: {
     port: 3000,
     open: true,
