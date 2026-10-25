@@ -12,7 +12,7 @@ export function createKeyboardHints(scene, mode = 'world') {
         ];
     const text = scene.add.text(10, 9, `KEY GUIDE\n${lines.join('\n')}`, {
         fontFamily: '"Press Start 2P"',
-        fontSize: '8px',
+        fontSize: '10px',
         lineSpacing: 8,
         color: '#ffffff',
         resolution: 2
