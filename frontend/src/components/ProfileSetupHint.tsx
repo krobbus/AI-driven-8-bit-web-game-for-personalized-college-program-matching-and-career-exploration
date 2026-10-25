@@ -24,7 +24,7 @@ const ProfileSetupHint: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                             Complete your <strong>Profile Creation (Character Creation and Preferences Discovery)</strong> before entering the campus and starting assessments.
                         </p>
                         <img
-                            src="assets/Manual/LeftWing.png"
+                            src="assets/Manual/Scenes/LeftWing.png"
                             alt="Left Wing map showing the ICT Office"
                         />
                         <p>
