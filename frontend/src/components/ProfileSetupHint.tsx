@@ -21,8 +21,7 @@ const ProfileSetupHint: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                     <section className="profileSetupHint">
                         <h1>BEFORE YOU PLAY</h1>
                         <p>
-                            Complete your <strong>Profile</strong> and <strong>Personalization</strong>
-                            {' '}before entering the campus and starting assessments.
+                            Complete your <strong>Profile Creation (Character Creation and Preferences Discovery)</strong> before entering the campus and starting assessments.
                         </p>
                         <img
                             src="assets/Manual/LeftWing.png"
