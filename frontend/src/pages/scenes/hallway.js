@@ -188,13 +188,13 @@ export default class Hallway extends Phaser.Scene {
                 x: 1390, y: 400, w: 590, h: 40, hintText1: "DO YOU WANT TO", hintText2: "PLAY CBA ?",
                 hintHeight: 50, hintWidth: 180, target: "openMenu", course: "CBA" },
             {                   // NPC 3
-                x: 1970, y: 410, w: 60, h: 30, hintText1: "INTERACT WITH HIM ?", 
+                x: 1970, y: 400, w: 60, h: 40, hintText1: "INTERACT WITH HIM ?", 
                 hintHeight: 30, hintWidth: 230, target: "talkToNPC3" },
             { 
                 x: 2050, y: 400, w: 590, h: 40, hintText1: "DO YOU WANT TO", hintText2: "PLAY CAS ?", 
                 hintHeight: 50, hintWidth: 180, target: "openMenu", course: "CAS" },
             {                      // NPC 4
-                x: 2940, y: 410, w: 60, h: 30, hintText1: "INTERACT WITH THEM ?", 
+                x: 2900, y: 400, w: 140, h: 40, hintText1: "INTERACT WITH THEM ?", 
                 hintHeight: 30, hintWidth: 240, target: "talkToNPC4" },
             { 
                 x: 3375, y: 400, w: 590, h: 40, hintText1: "DO YOU WANT TO", hintText2: "PLAY CTE ?", 
