@@ -153,7 +153,7 @@ export default class LeftWing extends Phaser.Scene {
             },
             { 
                 x: 250, y: 400, w: 220, h: 40, 
-                hintText1: "CHECK ACCOUNT", hintText2: "INFORMATION ?", hintHeight: 50, hintWidth: 170, 
+                hintText1: "CHECK PROFILE AND ", hintText2: "ACCOUNT INFORMATION ?", hintHeight: 50, hintWidth: 250, 
                 target: 'openModal'
             },
             { 
