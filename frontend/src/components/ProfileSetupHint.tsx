@@ -28,8 +28,8 @@ const ProfileSetupHint: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                             alt="Left Wing map showing the ICT Office"
                         />
                         <p>
-                            In the Left Wing at 2nd Floor, go directly in front of the window at the
-                            <strong> ICT Office</strong> and interact to open Profile Creation.
+                            In the Left Wing at 2nd Floor, go directly in front of the window at the 
+                            <strong>ICT Office</strong> and interact to open Profile Creation.
                         </p>
                         <button className="profileSetupHintContinue" onClick={onClose}>GOT IT</button>
                     </section>
