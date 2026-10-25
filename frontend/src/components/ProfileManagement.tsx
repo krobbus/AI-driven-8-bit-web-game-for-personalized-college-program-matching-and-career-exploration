@@ -154,19 +154,19 @@ const ProfilePreferencesCreation: React.FC<ModalProps> = ({ isOpen, onClose }) =
         const hasPersonality = selectedTags.some(t => t.type === 'personality');
         const invalidBaseFields: string[] = [];
 
-        if (!gender || (gender !== 'male' && gender !== 'female')) invalidBaseFields.push("a Gender selection");
-        if (!validateName(name.trim())) invalidBaseFields.push("a valid Name (4-10 letters)");
+        if (!gender || (gender !== 'male' && gender !== 'female')) invalidBaseFields.push("a Gender selection [Character Creation]");
+        if (!validateName(name.trim())) invalidBaseFields.push("a valid Name (4-10 letters) [Character Creation]");
         if (!hasSkill || !hasPersonality) {
             const tagReqs = [];
             if (!hasSkill) tagReqs.push("1 skill");
             if (!hasPersonality) tagReqs.push("1 personality");
-            invalidBaseFields.push(`at least ${tagReqs.join(" and ")}`);
+            invalidBaseFields.push(`at least ${tagReqs.join(" and ")} [Preferences Discovery]`);
         }
-        if (selectedCourses.length === 0) invalidBaseFields.push("at least 1 course");
+        if (selectedCourses.length === 0) invalidBaseFields.push("at least 1 course [Preferences Discovery]");
         if (invalidBaseFields.length > 0) {
             setFormError({
                 field: 'general', 
-                message: `Profile and Preferences incomplete,\nplease provide:\n\n- ${invalidBaseFields.join("\n- ")}` 
+                message: `Profile Creation incomplete,\nplease provide:\n\n- ${invalidBaseFields.join("\n- ")}` 
             });
             return;
         }
