@@ -1,6 +1,5 @@
-export function positionTopRightIcons(scene, firstIcon, secondIcon) {
-    const camera = scene.cameras.main;
-    const top = Math.max(12, camera.height * 0.025);
+export function positionTopRightIcons(scene, firstIcon, secondIcon, camera = scene.cameras.main) {
+    const top = Math.max(12, camera.height * 0.020);
     const right = Math.max(12, camera.width * 0.025);
     const gap = Math.max(8, camera.width * 0.01);
 
