@@ -9,7 +9,10 @@ import Settings from '/src/pages/prefabs/settings.js';
 
 export default class Hallway extends Phaser.Scene {
     constructor() {
-        super('Hallway');
+        super({
+            key: 'Hallway',
+            cameras: [{ x: 50, y: 0, width: 1200, height: 600 }]
+        });
         this.lastInteractionTime = 0;
         this.interactionCooldown = 300;
     }
@@ -17,13 +20,11 @@ export default class Hallway extends Phaser.Scene {
     async create() {
         const screenCenterY = this.cameras.main.worldView.y + this.cameras.main.height / 2;
 
-        const viewWidth = 1200;
-        const viewHeight = 600;
-        const xPadding = (this.scale.width - viewWidth) / 2;
-        const yPadding = (this.scale.height - viewHeight) / 2;
+        const viewWidth = this.cameras.main.width;
+        const viewHeight = this.cameras.main.height;
         const hallwayWidth = 4000 * 1.5;
-        this.cameras.main.setViewport(xPadding, yPadding, viewWidth, viewHeight);
         this.cameras.main.setBounds(0, 0, hallwayWidth, 600);
+        this.hudCamera = this.cameras.add(0, 0, this.scale.width, this.scale.height);
 
         this.bg = this.add.sprite(0, screenCenterY, 'hallwaybg')                                            // bg
             .setScale(1.5)
@@ -168,7 +169,7 @@ export default class Hallway extends Phaser.Scene {
                 if (isModalOpened) return;
                 this.settings.toggle()
             });
-        positionTopRightIcons(this, this.manual, this.settingsIcon);
+        positionTopRightIcons(this, this.manual, this.settingsIcon, this.hudCamera);
 
         let debugGraphics = this.add.graphics();//.lineStyle(2, 0x00ff00, 1);
         this.activeZone = null;
@@ -236,6 +237,13 @@ export default class Hallway extends Phaser.Scene {
         this.updateMobileUI();
 
         this.mobileControls.reposition(viewWidth, viewHeight);
+
+        const hudObjects = [this.manual, this.settingsIcon, this.keyboardHints];
+        this.hudCamera.ignore(this.children.list);
+        this.cameras.main.ignore(hudObjects);
+        hudObjects.forEach((gameObject) => {
+            gameObject.cameraFilter &= ~this.hudCamera.id;
+        });
     }
 
     createUIElements(){
