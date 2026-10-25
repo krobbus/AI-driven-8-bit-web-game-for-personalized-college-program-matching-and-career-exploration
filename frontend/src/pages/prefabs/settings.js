@@ -15,6 +15,7 @@ export default class SettingsPanel extends Phaser.GameObjects.Container {
         const storedMobileMode = localStorage.getItem('mobileMode') === 'true';
         scene.isMobileMode = storedMobileMode;
         scene.hideName = localStorage.getItem('hideName') === 'true';
+        scene.hideKeys = localStorage.getItem('hideKeys') === 'true';
 
         const storedVolume = localStorage.getItem('volumeLevel') || 'HIGH';
         scene.sound.volume = VOLUME_LEVELS[storedVolume];
@@ -39,7 +40,7 @@ export default class SettingsPanel extends Phaser.GameObjects.Container {
                 key: 'mobile',
                 text: 'MOBILE MODE',
                 value: scene.isMobileMode ? 'ON' : 'OFF',
-                y: -85,
+                y: -100,
                 size: '11px',
                 fill: '#ffffff',
                 interactive: true,
@@ -49,7 +50,7 @@ export default class SettingsPanel extends Phaser.GameObjects.Container {
                 key: 'volume',
                 text: 'SOUND',
                 value: storedVolume,
-                y: -45,
+                y: -60,
                 size: '11px',
                 fill: '#ffffff',
                 interactive: true,
@@ -59,7 +60,17 @@ export default class SettingsPanel extends Phaser.GameObjects.Container {
                 key: 'hideName',
                 text: 'HIDE NAME',
                 value: scene.hideName ? 'ON' : 'OFF',
-                y: -5,
+                y: -20,
+                size: '11px',
+                fill: '#ffffff',
+                interactive: true,
+                isSwitch: true
+            },
+            {
+                key: 'hideKeys',
+                text: 'HIDE KEYS',
+                value: scene.hideKeys ? 'ON' : 'OFF',
+                y: 20,
                 size: '11px',
                 fill: '#ffffff',
                 interactive: true,
@@ -69,13 +80,13 @@ export default class SettingsPanel extends Phaser.GameObjects.Container {
 
         if (scene.scene.key === 'Classroom') {
             items.push(
-                { key: 'resume', text: 'RESUME', y: 65, size: '12px', fill: '#a3d9a5', interactive: true },
-                { key: 'back', text: 'RETURN TO HALLWAY', y: 115, size: '10px', fill: '#e2d58b', interactive: true },
-                { key: 'exit', text: 'EXIT TO TITLE', y: 165, size: '10px', fill: '#e89a8f', interactive: true }
+                { key: 'resume', text: 'RESUME', y: 80, size: '12px', fill: '#a3d9a5', interactive: true },
+                { key: 'back', text: 'RETURN TO HALLWAY', y: 120, size: '10px', fill: '#e2d58b', interactive: true },
+                { key: 'exit', text: 'EXIT TO TITLE', y: 160, size: '10px', fill: '#e89a8f', interactive: true }
             );
         } else{
             items.push(
-                { key: 'resume', text: 'RESUME', y: 95, size: '12px', fill: '#a3d9a5', interactive: true },
+                { key: 'resume', text: 'RESUME', y: 110, size: '12px', fill: '#a3d9a5', interactive: true },
                 { key: 'exit', text: 'EXIT TO TITLE', y: 150, size: '10px', fill: '#e89a8f', interactive: true }
             );
         };
@@ -138,7 +149,7 @@ export default class SettingsPanel extends Phaser.GameObjects.Container {
     }
 
     getSwitchKnobX(key, value) {
-        if (key === 'mobile' || key === 'hideName') {
+        if (key === 'mobile' || key === 'hideName' || key === 'hideKeys') {
             return value === 'ON' ? 137 : 99;
         }
 
@@ -216,6 +227,13 @@ export default class SettingsPanel extends Phaser.GameObjects.Container {
                     const nameContainer = this.scene.player?.nameContainer || this.scene.nameContainer;
                     if (nameContainer) nameContainer.setVisible(!this.scene.hideName);
                     this.updateSwitch(key, this.scene.hideName ? 'ON' : 'OFF');
+                    break;
+
+                case 'hideKeys':
+                    this.scene.hideKeys = !this.scene.hideKeys;
+                    localStorage.setItem('hideKeys', this.scene.hideKeys);
+                    this.scene.keyboardHints?.setVisible(!this.scene.isMobileMode && !this.scene.hideKeys);
+                    this.updateSwitch(key, this.scene.hideKeys ? 'ON' : 'OFF');
                     break;
                 
                 case 'back':

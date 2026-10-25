@@ -384,7 +384,7 @@ export default class Outdoor extends Phaser.Scene {
 
     updateMobileUI() {
         this.mobileControls.setVisible(this.isMobileMode);
-        this.keyboardHints.setVisible(!this.isMobileMode);
+        this.keyboardHints.setVisible(!this.isMobileMode && !this.hideKeys);
     }
     toggleSettings() { this.settingsPanel.setVisible(!this.settingsPanel.visible); }
 

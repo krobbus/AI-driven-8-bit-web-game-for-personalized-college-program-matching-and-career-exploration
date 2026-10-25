@@ -28,5 +28,5 @@ export function createKeyboardHints(scene, mode = 'world') {
     return scene.add.container(16, 16, [background, text])
         .setScrollFactor(0)
         .setDepth(4000)
-        .setVisible(!scene.isMobileMode);
+        .setVisible(!scene.isMobileMode && !scene.hideKeys);
 }
