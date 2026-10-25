@@ -1,4 +1,18 @@
+::-webkit-scrollbar{ width: 1.8vmin; }
+::-webkit-scrollbar-track{ background: rgba(0, 0, 0, 0.5); }
+::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: var(--radius-2xl);
+}
+::-webkit-scrollbar-thumb:hover { background-color: var(--color-green-main); }
+
 :root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  user-select: none;
+
   --color-green-dark: #344e41;
   --color-green-main: #588157;
   --color-green-light: #a3b18a;
@@ -20,3 +34,35 @@
 
   --shadow-control: 1.2vmin 1.2vmin 0.8vmin rgba(0, 0, 0, 0.1);
 }
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-image: url("/assets/Background/PLMUN.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: stretch;
+  background-attachment: scroll;
+  background-color: rgba(0, 0, 0, 0.4);
+  background-blend-mode: multiply;
+
+  font-family: "Jersey 10";
+  text-align: center;
+  padding: 7.5vmin;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-xl);
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+a, button{ cursor: pointer }
