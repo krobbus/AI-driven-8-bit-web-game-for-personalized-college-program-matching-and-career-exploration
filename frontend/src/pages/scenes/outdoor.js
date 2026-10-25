@@ -182,6 +182,12 @@ export default class Outdoor extends Phaser.Scene {
                 hintHeight: 50, hintWidth: 220, gapY: 15, specialLayout: true,
                 spawnInNextScene: { x: 420, y: 430 }, target: 'RightWing'
             },
+            { 
+                x: 1180, y: 400, w: 60, h: 100,
+                hintText1: "DO YOU WANT TO", hintText2: "ENTER RIGHT WING ?",
+                hintHeight: 50, hintWidth: 220, gapY: 15, specialLayout: true,
+                spawnInNextScene: { x: 420, y: 430 }, target: 'RightWing'
+            },
             {
                 x: 470, y: 430, w: 60, h: 30,
                 hintText1: "INTERACT WITH HER ?",
