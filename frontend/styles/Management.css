@@ -329,6 +329,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            gap: var(--space-md);
             width: 100%;
             box-sizing: border-box;
 
@@ -596,7 +597,7 @@
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
-        gap: var(--space-md);
+        gap: var(--space-lg);
         width: 100%;
         box-sizing: border-box;
 
@@ -604,6 +605,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            gap: var(--space-xs);
             width: 100%;
             box-sizing: border-box;
 
