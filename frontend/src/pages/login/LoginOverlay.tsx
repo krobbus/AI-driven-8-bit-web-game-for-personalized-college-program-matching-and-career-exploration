@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
-import '../../../styles/Login.css';
 import '../../services/playerData';
 import PasswordRecovery from '../../components/PasswordRecovery';
 import Manual from '../../components/Manual';
