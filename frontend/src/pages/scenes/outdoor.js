@@ -46,7 +46,7 @@ export default class Outdoor extends Phaser.Scene {
         const snapshot = await db.ref(`webGame/${playerID}`).once('value');
         const userData = snapshot.val();
         const gender = (userData && userData.gender) ? userData.gender : 'male';
-        this.playerName = (userData && userData.name) ? userData.name : "Guest";        
+        this.playerName = (userData && userData.name) ? userData.name : "Guest";
 
         this.player = new Player(this, spawnX, spawnY, gender, this.playerName)                                          // player
             .setDepth(1)
@@ -201,7 +201,11 @@ export default class Outdoor extends Phaser.Scene {
         this.keyboardHints = createKeyboardHints(this);
         this.createUIElements();
         this.updateMobileUI();
-        window.dispatchEvent(new CustomEvent('openProfileSetupHintModal'));
+
+        if (this.playerName === "Guest"){
+            this.showBlockedHint();
+            return;
+        }
     }
 
     createUIElements(){
@@ -314,7 +318,7 @@ export default class Outdoor extends Phaser.Scene {
                     }
                 } else {
                     if (this.activeZone.target === 'RightWing') {
-                        if (!this.playerName || this.playerName === 'Guest') {
+                        if (this.playerName === "Guest") {
                             this.showBlockedHint();
                             return;
                         }

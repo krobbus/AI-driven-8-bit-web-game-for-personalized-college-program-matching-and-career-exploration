@@ -48,6 +48,14 @@ export default class LeftWing extends Phaser.Scene {
         const gender = (userData && userData.gender) ? userData.gender : 'male';
         this.playerName = (userData && userData.name) ? userData.name : "Guest";        
         this.isPermanentPlayer = userData?.temporary === false;
+        const profileTags = Array.isArray(userData?.tags) ? userData.tags : [];
+        this.hasCompleteProfile = Boolean(
+            userData?.name &&
+            profileTags.some(tag => tag.type === 'skill') &&
+            profileTags.some(tag => tag.type === 'personality') &&
+            Array.isArray(userData?.courses) &&
+            userData.courses.length > 0
+        );
 
         this.player = new Player(this, spawnX, spawnY, gender, this.playerName)                                          // player
             .setDepth(1)
@@ -165,18 +173,17 @@ export default class LeftWing extends Phaser.Scene {
 
         this.isMenuOpen = false;
         this.menuIndex = 0;
-        this.menuOptions = this.isPermanentPlayer
-            ? [
-                { text: "PROFILE MANAGEMENT", target: "openProfilePreferencesModal" },
-                { text: "ACCOUNT MANAGEMENT", target: "openAccountRegistrationModal" },
-                { text: "VIEW DASHBOARD", target: "openDashboardModal" },
-                { text: "CANCEL", target: "cancel" }
-            ]
-            : [
-                { text: "PROFILE CREATION", target: "openProfilePreferencesModal" },
-                { text: "ACCOUNT REGISTRATION", target: "openAccountRegistrationModal" },
-                { text: "CANCEL", target: "cancel" }
-            ];
+
+        const profileText = this.hasCompleteProfile ? "PROFILE MANAGEMENT" : "PROFILE CREATION";
+        const accountText = this.isPermanentPlayer ? "ACCOUNT MANAGEMENT" : "ACCOUNT REGISTRATION";
+        this.menuOptions = [
+            { text: profileText, target: "openProfileManagementModal" },
+            { text: accountText, target: "openAccountManagementModal" },
+            ...(this.isPermanentPlayer
+                ? [{ text: "VIEW DASHBOARD", target: "openDashboardModal" }]
+                : []),
+            { text: "CANCEL", target: "cancel" }
+        ];
 
         const savedMode = localStorage.getItem('mobileMode');
         if (savedMode === null) {
@@ -350,7 +357,7 @@ export default class LeftWing extends Phaser.Scene {
                     }
                 } else {
                     if (this.activeZone.target === 'Hallway') {
-                        if (!this.playerName || this.playerName === 'Guest') {
+                        if (this.playerName === "Guest") {
                             this.showBlockedHint();
                             return;
                         }
@@ -444,13 +451,13 @@ export default class LeftWing extends Phaser.Scene {
     toggleSettings() { this.settingsPanel.setVisible(!this.settingsPanel.visible); }
 
     startPageTransition(targetSceneName, lastPosition) {
-        if (targetSceneName === 'openProfilePreferencesModal') {
+        if (targetSceneName === 'openProfileManagementModal') {
             this.input.keyboard.resetKeys();
             window.dispatchEvent(new CustomEvent('openProfileManagementModal'));
             return;
         }
 
-        if (targetSceneName === 'openAccountRegistrationModal') {
+        if (targetSceneName === 'openAccountManagementModal' || targetSceneName === 'openModal') {
             this.input.keyboard.resetKeys();
             window.dispatchEvent(new CustomEvent('openAccountManagementModal'));
             return;
