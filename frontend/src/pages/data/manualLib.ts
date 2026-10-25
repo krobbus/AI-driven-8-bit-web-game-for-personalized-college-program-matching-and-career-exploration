@@ -32,23 +32,41 @@ export interface ManualNavItem {
     children?: ManualNavItem[];
 }
 
+const manualImage = (path: string, alt: string, caption?: string): ManualImage => ({
+    src: `assets/Manual/${path}`,
+    alt,
+    ...(caption ? { caption } : {}),
+});
+
+const textBlock = (...paragraphs: string[]): ManualBlock => ({
+    type: 'text',
+    paragraphs,
+});
+
+const imageBlock = (image: ManualImage): ManualBlock => ({
+    type: 'image',
+    image,
+});
+
+const imageGroupBlock = (...images: ManualImage[]): ManualBlock => ({
+    type: 'images',
+    images,
+});
+
 export const manualNav: ManualNavItem[] = [
     {
         label: 'HOME',
         target: 'manualContainer',
         children: [
             { label: 'INTRODUCTION', target: 'introductionContainer' },
-            { label: 'SYSTEM REQUIREMENTS', target: 'requirementsContainer' },
         ],
     },
     {
         label: 'FEATURES',
         target: 'featuresContainer',
         children: [
-            { label: 'LOGIN PROCEDURE', target: 'loginProcedureContainer' },
             { label: 'SECURITY MEASURE', target: 'securityMeasureContainer' },
             { label: 'GUIDE FOR PLAYERS', target: 'guideForPlayersContainer' },
-            { label: 'LOGOUT PROCEDURE', target: 'logoutProcedureContainer' },
         ],
     },
     {
@@ -59,22 +77,34 @@ export const manualNav: ManualNavItem[] = [
                 label: 'SCENES',
                 target: 'scenesContainer',
                 children: [
-                    { label: 'OUTDOOR SCENE', target: 'outdoorContainer' },
-                    { label: 'LEFT WING SCENE', target: 'leftWingContainer' },
-                    { label: 'HALLWAY SCENE', target: 'hallwayContainer' },
-                    { label: 'RIGHT WING SCENE', target: 'rightWingContainer' },
+                    { label: 'OUTDOOR', target: 'outdoorContainer' },
+                    { label: 'LEFT WING', target: 'leftWingContainer' },
+                    { label: 'HALLWAY', target: 'hallwayContainer' },
+                    { label: 'RIGHT WING', target: 'rightWingContainer' },
+                    { label: 'CLASSROOM', target: 'classroomContainer' },
                 ],
             },
             {
-                label: 'MODALS',
-                target: 'modalsContainer',
+                label: 'DASHBOARD',
+                target: 'dashboardContainer',
                 children: [
-                    { label: 'PASSWORD RECOVERY MODAL', target: 'passwordRecoveryContainer' },
-                    { label: 'DASHBOARD MODAL', target: 'dashboardContainer' },
-                    { label: 'ACCOUNT MANAGEMENT MODAL', target: 'accountManagementContainer' },
-                    { label: 'LEADERBOARD MODAL', target: 'leaderboardContainer' },
+                    { label: 'PROFILE', target: 'dashboardProfileContainer' },
+                    { label: 'STATISTICS', target: 'dashboardStatisticsContainer' },
+                    { label: 'SKILLS AND PERSONALITY', target: 'dashboardTraitsContainer' },
+                    { label: 'AI COMMENT AND ACTIONS', target: 'dashboardActionsContainer' },
                 ],
             },
+        ],
+    },
+    {
+        label: 'PROCESS',
+        target: 'processContainer',
+        children: [
+            { label: 'LOGIN PROCEDURE', target: 'loginProcedureContainer' },
+            { label: 'ACCOUNT SETUP', target: 'accountSetupContainer' },
+            { label: 'LOGOUT PROCEDURE', target: 'logoutProcedureContainer' },
+            { label: 'ASSESSMENT', target: 'assessmentContainer' },
+            { label: 'RECOMMENDATIONS', target: 'recommendationsContainer' },
         ],
     },
 ];
@@ -83,291 +113,343 @@ export const manualPages: ManualPage[] = [
     {
         navIds: ['manualContainer'],
         chapter: '',
-        title: 'How to play',
-        lead: 'An AI-driven 8-bit web game for personalized college program matching and career exploration',
+        title: 'Your campus adventure starts here',
+        lead: 'A friendly guide to your 8-bit college and career exploration journey',
         variant: 'cover',
         blocks: [
-            {
-                type: 'text',
-                paragraphs: [
-                    'Welcome, player! This manual walks you through the campus, the assessments, and everything in between.',
-                    'Use the menu above to jump to any topic, or turn the pages with the buttons below or the left and right arrow keys.',
-                ],
-            },
+            textBlock(
+                'Welcome, player! I will help you find your way around the campus, complete your assessments, and understand your personalized recommendations.',
+                'Choose a topic from the menu or use the page buttons and left/right arrow keys or drag the book page to explore this guide.'
+            ),
         ],
     },
     {
         navIds: ['introductionContainer'],
-        chapter: 'Home',
-        title: 'Introduction',
-        lead: 'An AI-driven 8-bit web game for personalized college program matching and career exploration',
+        chapter: 'Introduction',
+        title: 'Welcome to your career exploration game',
+        lead: 'Explore college programs at your own pace.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Background/PLMUN.png', alt: 'PLMUN background' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'This user manual is designed to guide players in understanding and navigating the AI-driven 8-bit web game for personalized college program matching and career exploration. The game uses an interactive, retro-style environment combined with artificial intelligence to help players explore suitable college programs and career paths based on their interests, personality, skills, and in-game decisions.',
-                    'By following this user manual, players can easily navigate the system, understand game features, and maximize their learning experience.',
-                ],
-            },
+            textBlock(
+                'This game combines a retro campus adventure with assessments to help you reflect on your interests, skills, and personality. Explore the campus, choose a course, and answer its assessment questions.',
+                'Your Dashboard brings together your profile, assessment progress, results, and AI-generated suggestions. The guide is here whenever you need a reminder about where to go or what to do next.',
+                'Ready? Start by exploring the areas around campus, then follow the assessment and recommendation steps in this manual.'
+            ),
         ],
     },
     {
-        navIds: ['requirementsContainer'],
-        chapter: 'Home',
-        title: 'System requirements',
-        lead: 'What do I need to play this game?',
-        blocks: [
-            {
-                type: 'list',
-                items: [
-                    'A device with a web browser (Google Chrome, Mozilla Firefox, or Microsoft Edge)',
-                    'Stable internet connection',
-                    'Desktop, laptop, or mobile device',
-                ],
-            },
-        ],
-    },
-    {
-        navIds: ['featuresContainer', 'loginProcedureContainer'],
+        navIds: ['featuresContainer'],
         chapter: 'Features',
-        title: 'Login procedure',
+        title: 'Helpful features around campus',
+        lead: 'Here is what each feature does and where you can find it.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/LoginPage.png', alt: 'Login page' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'The login gateway serves as your entry point into the 8-bit world. It lets players enter the game in different ways. Whether you are exploring as a guest or resuming your journey, our system provides a flexible and secure way to manage your career discovery progress.',
-                ],
-            },
             {
                 type: 'cards',
                 cards: [
                     {
-                        image: { src: 'assets/Manual/GuestLogin.png', alt: 'Guest login' },
-                        title: 'PLAY AS A GUEST',
-                        text: [
-                            'Jump straight into the action. Ideal for a quick look at the 8-bit settings, though progress is stored locally and it will be lost if you leave the game.',
-                            'Click “Play as a Guest” to immediately enter the game. Guest players can explore the game but may have limited access to saving progress.',
-                        ],
+                        image: manualImage('Features/KeyGuide.png', 'Keyboard guide showing game controls'),
+                        title: 'KEY GUIDE',
+                        text: ['Find the key guide on the game screen when keyboard controls are available. It shows how to move, navigate menus, and interact. Open Settings to change the key-guide visibility or mobile controls.'],
                     },
                     {
-                        image: { src: 'assets/Manual/AccountLogin.png', alt: 'Account login' },
-                        title: 'LOGIN WITH EXISTING ACCOUNT',
-                        text: [
-                            'Securely resume your journey. Enter your registered Player ID or Email along with your password, and click login to proceed. You will directly spawn right at the Left Wing to continue your career matching adventure.',
-                        ],
+                        image: manualImage('Features/NPCDialogue.png', 'A non-player character dialogue'),
+                        title: 'NPC DIALOGUE',
+                        text: ['Talk with non-player characters (NPCs) you meet around campus. They share helpful information and directions. Move near a character and use the on-screen interaction prompt.'],
+                    },
+                    {
+                        image: manualImage('Features/Leaderboard.png', 'Leaderboard with player assessment results'),
+                        title: 'LEADERBOARD',
+                        text: ['Visit the Right Wing to open the leaderboard. Browse assessment results and compare rankings by course.'],
+                    },
+                    {
+                        image: manualImage('Features/ProfileCreationHint.png', 'Hint prompting the player to complete profile creation'),
+                        title: 'PROFILE SETUP REMINDER',
+                        text: ['If your profile is not ready, the game displays a reminder to complete Character Creation and Preferences Discovery. Use the Profile Creation option in the Left Wing Menu to finish your profile.'],
                     },
                 ],
             },
+            textBlock(
+                'You can also open the Dashboard from the Left Wing to review your own progress or search for another player’s profile. The Dashboard section of this guide explains what you can see.'
+            ),
         ],
     },
     {
         navIds: ['securityMeasureContainer'],
         chapter: 'Features',
-        title: 'Security measure',
+        title: 'Keep your account and progress safe',
+        lead: 'A few simple habits help protect your profile.',
         blocks: [
             {
-                type: 'text',
-                paragraphs: [
-                    'Protect your progress with integrated security features: multi-step login authentication, sensitive data masking for PINs and passwords, and a streamlined recovery process to ensure you never lose access to your career exploration journey.',
+                type: 'list',
+                items: [
+                    'Keep your password and account PIN private. Do not share them with other players.',
+                    'Use the password recovery process if you cannot sign in. It asks you to verify your account and PIN before setting a new password.',
+                    'Choose the account login option when you want your profile and progress saved to your account. Guest play is intended for trying the game and may not save progress between visits.',
+                    'Log out when you finish, especially when using a shared device.',
+                    'Only search for and view profiles for a legitimate reason. Other players’ dashboards may show their statistics, skills, personality preferences, and AI comment.',
                 ],
             },
+            textBlock(
+                'Your account PIN is a recovery safeguard, not a password to share. Store your login details somewhere private and accessible only to you.'
+            ),
         ],
     },
     {
         navIds: ['guideForPlayersContainer'],
         chapter: 'Features',
-        title: 'Guide for players',
+        title: 'A few tips before you begin',
+        lead: 'Take your time and make the results useful to you.',
         blocks: [
-            {
-                type: 'text',
-                paragraphs: [
-                    'Success in career matching comes from honesty and exploration. Interact with every NPC, answer the AI’s questions truthfully, and don’t be afraid to retake the assessments. Pay close attention to the AI’s feedback; these insights are tailored to your gameplay and academic strengths.',
-                ],
-            },
+            imageBlock(manualImage('Features/ProfileCreationHint.png', 'A reminder to finish profile creation')),
             {
                 type: 'list',
                 items: [
-                    'Answer questions honestly to receive accurate AI recommendations',
-                    'Explore different game paths to discover various career options',
-                    'Review statistics on dashboard to track progress and improvement',
-                    'Define your actual skills and personality traits to ensure accurate and correct results',
-                    'Verify that your selected traits accurately reflect your strengths for a more personalized career analysis',
-                ],
-            },
-        ],
-    },
-    {
-        navIds: ['logoutProcedureContainer'],
-        chapter: 'Features',
-        title: 'Logout procedure',
-        blocks: [
-            {
-                type: 'images',
-                images: [
-                    {
-                        src: 'assets/Manual/SettingsLogout.png',
-                        alt: 'SettingsLogout',
-                        caption: 'Logout can be found\ninside the settings panel',
-                    },
-                    {
-                        src: 'assets/Manual/DashboardLogout.png',
-                        alt: 'DashboardLogout',
-                        caption: 'Logout can be found\ninside the dashboard modal',
-                    },
-                ],
-            },
-            {
-                type: 'text',
-                paragraphs: [
-                    'Closing your session correctly ensures that all career matches and game progress are synchronized with our servers. No data loss, and your student profile stays up to date for your next exploration.',
+                    'Complete Character Creation and Preferences Discovery before starting your assessments.',
+                    'Choose skills, personality traits, and courses that genuinely reflect your interests and strengths.',
+                    'Explore all the campus areas and ask NPCs for help when you need directions.',
+                    'Finish each assessment to save its result and update your Dashboard progress.',
+                    'Review your answers and explanations after an assessment. You can retake assessments and track your latest progress.',
+                    'Complete all three assessments for a course before asking the AI to evaluate it. Completing more courses gives you a broader comparison.',
                 ],
             },
         ],
     },
     {
         navIds: ['overviewContainer', 'scenesContainer'],
-        chapter: 'Scenes',
-        title: 'Scenes',
+        chapter: 'Overview',
+        title: 'Explore the campus',
+        lead: 'Each area has a different role in your journey.',
         blocks: [
-            {
-                type: 'text',
-                paragraphs: [
-                    'A lively scenery inside and outside of the main campus serves a unique purpose in your career discovery. Explore every area carefully, from the campus grounds outside to the halls within, as each location holds something valuable to help you find the right college program and career path for you.',
-                    'The next four pages cover the Outdoor area, the Left Wing, the Hallway, and the Right Wing.',
-                ],
-            },
+            textBlock(
+                'The Outdoor area is your starting point. From there, explore the Left Wing, Hallway, and Right Wing. The Hallway leads into course classrooms, where you take assessments.',
+                'Follow the next pages to learn what you will find in each scene and where to go for help, account tools, assessments, and player rankings.'
+            ),
         ],
     },
     {
         navIds: ['outdoorContainer'],
-        chapter: 'Scenes',
-        title: 'Outdoor scene',
-        lead: 'Outside of the campus',
+        chapter: 'Overview · Scenes',
+        title: 'Outdoor',
+        lead: 'Start here and find your way into the campus.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/Outdoor.png', alt: 'Outdoor scene' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'The outdoor area serves as the starting point of your journey. Explore the campus grounds and find your way inside through two entry points: the main door at the front of the building leads you into the Left Wing, while heading to the right side past the first staircase will bring you directly into the Right Wing. This is where your career exploration adventure begins.',
-                ],
-            },
+            imageBlock(manualImage('Scenes/Outdoor.png', 'Outdoor campus scene')),
+            textBlock(
+                'The Outdoor scene is the starting area. Explore the grounds and use the campus entrances to travel to the Left Wing or Right Wing.',
+                'If you are unsure where to go, look for a nearby NPC or use the game controls shown in the key guide.'
+            ),
         ],
     },
     {
         navIds: ['leftWingContainer'],
-        chapter: 'Scenes',
-        title: 'Left Wing scene',
-        lead: 'Inside of the campus',
+        chapter: 'Overview · Scenes',
+        title: 'Left Wing',
+        lead: 'Open your account tools and Dashboard here.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/LeftWing.png', alt: 'Left wing scene' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'The left wing is your central hub for account and progress management. Access the Dashboard Modal to review your career matching statistics and progress, or open the Account Management Modal to update your player profile and settings. On the right side of this wing lies the doorway leading into the Hallway, your path deeper into the campus. Head downstairs to return to the Outdoor area.',
-                ],
-            },
+            imageBlock(manualImage('Scenes/LeftWing.png', 'Left Wing campus scene')),
+            textBlock(
+                'The Left Wing is where you can access account and progress tools. Open Account Management to create or update your profile, or open the Dashboard to review course progress, assessment results, skills, personality, and AI suggestions.',
+                'Use the nearby campus route to continue to the Hallway and its course doors.'
+            ),
         ],
     },
     {
         navIds: ['hallwayContainer'],
-        chapter: 'Scenes',
-        title: 'Hallway scene',
-        lead: 'Inside of the campus',
+        chapter: 'Overview · Scenes',
+        title: 'Hallway',
+        lead: 'Choose a course and enter its classroom.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/Hallway.png', alt: 'Hallway scene' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'The hallway is the core of your career assessment experience. Discover 8 doors in total, each representing a different college course: CITCS, CAS, CBA, CCJ, IPPG, ISW, CTE, and COM. Choose a course that interests you and then select from 3 different types of assessments: Skill, Personality, and Course-Related. Each is designed to evaluate a unique aspect of your strengths and suitability for that program. On the left side is the doorway back to the Left Wing, while the right side leads you into the Right Wing.',
-                ],
-            },
+            imageBlock(manualImage('Scenes/Hallway.png', 'Hallway with doors to college courses')),
+            textBlock(
+                'The Hallway connects you to the available college course areas. Choose a course door, then select the assessment you want to take. You can explore both courses you selected during Preferences Discovery and other available courses.',
+                'The Hallway also connects the Left Wing and the Right Wing. Complete your assessments in the classroom, then return to the Dashboard to check your progress.'
+            ),
         ],
     },
     {
         navIds: ['rightWingContainer'],
-        chapter: 'Scenes',
-        title: 'Right Wing scene',
-        lead: 'Inside of the campus',
+        chapter: 'Overview · Scenes',
+        title: 'Right Wing',
+        lead: 'Compare assessment rankings on the leaderboard.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/RightWing.png', alt: 'Right wing scene' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'The right wing is where you can track and compare performance across all players. Access the Leaderboard Modal to view rankings for every course: see who answered, who achieved the highest scores, and how quickly they completed their assessments. On the left side of this wing is the doorway leading back to the Hallway, and heading downstairs will return you to the Outdoor area.',
-                ],
-            },
+            imageBlock(manualImage('Scenes/RightWing.png', 'Right Wing campus scene')),
+            textBlock(
+                'Visit the Right Wing to open the Leaderboard. Use its course filters to compare available player assessment rankings.',
+                'When you are ready to continue exploring or take another assessment, return to the Hallway.'
+            ),
         ],
     },
     {
-        navIds: ['modalsContainer'],
-        chapter: 'Modals',
-        title: 'Modals',
+        navIds: ['classroomContainer'],
+        chapter: 'Overview · Scenes',
+        title: 'Classroom',
+        lead: 'Take the three assessments available for each course.',
         blocks: [
-            {
-                type: 'text',
-                paragraphs: [
-                    'Modals are interactive pop-up panels that appear on top of the game world, giving you access to key features without leaving the scene. Each modal serves a specific purpose, from managing your account and tracking your career assessment progress, to recovering your credentials and competing on the leaderboard.',
-                    'These panels are accessible at designated points throughout the campus and are designed to keep your journey organized, secure, and personalized.',
-                ],
-            },
+            imageBlock(manualImage('Scenes/Classroom/CourseRelatedAssessment.png', 'Course-related assessment in the classroom', 'Course-Related Assessment')),
+            textBlock('Answer questions about the course area. Your score and answers are saved to that course when you finish.'),
+            imageBlock(manualImage('Scenes/Classroom/SkillAssessment.png', 'Skill assessment in the classroom', 'Skill Assessment')),
+            textBlock('Reflect on skills connected with the course and your strengths.'),
+            imageBlock(manualImage('Scenes/Classroom/PersonalityAssessment.png', 'Personality assessment in the classroom', 'Personality Assessment')),
+            textBlock(
+                'Each course has a Course-Related, Skill, and Personality Assessment. Finish all three to complete that course’s progress and make it ready for AI evaluation. You need to reach the assessment result screen for your completed answers to be saved.'
+            ),
         ],
     },
     {
-        navIds: ['passwordRecoveryContainer'],
-        chapter: 'Modals',
-        title: 'Password recovery modal',
+        navIds: ['dashboardContainer', 'dashboardProfileContainer'],
+        chapter: 'Overview · Dashboard',
+        title: '1. Profile',
+        lead: 'Review player information and search for another profile.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/ForgotPassword.png', alt: 'Password recovery' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'A 3-step flow: find your account via Player ID or email (with a live “found” confirmation card), verify your 4-digit PIN for security, then set a new password. Steps 2 and 3 are visually locked until the prior step clears.',
-                ],
-            },
+            imageBlock(manualImage('Modals/Dashboard/Profile.png', 'Dashboard profile section')),
+            textBlock(
+                'The Profile section shows the player’s profile details, such as name, email, role, and other account information. Some private details are available only when viewing your own profile or when you have administrator access.',
+                'Use the Dashboard search field to look up another player by Player ID. You can view that player’s statistics, skills, personality preferences, and comment or suggestions. Respect other players’ privacy when searching.'
+            ),
+            imageBlock(manualImage('Features/ViewOtherProfiles.png', 'Dashboard search for another player profile')),
         ],
     },
     {
-        navIds: ['dashboardContainer'],
-        chapter: 'Modals',
-        title: 'Dashboard modal',
+        navIds: ['dashboardStatisticsContainer'],
+        chapter: 'Overview · Dashboard',
+        title: '2. Statistics',
+        lead: 'Track course completion, scores, and assessment history.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/Dashboard.png', alt: 'Dashboard' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'It shows the player’s profile information and summary stats: the list of courses (assessments played or done, course-related total score), course progression (selected or preferred and not selected), and the selected skill and personality tags. It also holds an AI comment and suggestions box (only shown when all 3 assessments are complete) and action buttons for reset and delete. A search bar lets you look up other player dashboards.',
-                ],
-            },
+            imageBlock(manualImage('Modals/Dashboard/Statistics.png', 'Dashboard course statistics and progress')),
+            textBlock(
+                'The Statistics section lists the courses you chose during Profile Creation in Preferences Discovery. Open a course to see its Course-Related, Skill, and Personality Assessment status.',
+                'Finished assessments show their saved results and history, including the Course-Related score. The progress bar tracks how many of the three assessments you have completed. Once all three are complete, the course reaches 100% and is marked ready for evaluation.'
+            ),
         ],
     },
     {
-        navIds: ['accountManagementContainer'],
-        chapter: 'Modals',
-        title: 'Account management modal',
+        navIds: ['dashboardTraitsContainer'],
+        chapter: 'Overview · Dashboard',
+        title: '3. Skills and personality',
+        lead: 'See the preferences saved in your player profile.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/AccountManagement.png', alt: 'Account management' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'Automatically adapts between Registration (if you’re a new player) and Manage Account. Registration collects profile data, account information, and preference selections (course preferred, current skills, and interests) that tailor the AI analysis. Manage Account pre-fills existing data for updating. It also includes instructions and the purpose of account creation, which is optional.',
-                ],
-            },
+            imageBlock(manualImage('Modals/Dashboard/SkillsAndPersonality.png', 'Dashboard skills and personality preferences')),
+            textBlock(
+                'This section displays your saved skill and personality preferences. These are the choices you made during Preferences Discovery, not a score generated by an assessment.',
+                'If the list does not represent you anymore, update your preferences through Account Management before generating new suggestions.'
+            ),
         ],
     },
     {
-        navIds: ['leaderboardContainer'],
-        chapter: 'Modals',
-        title: 'Leaderboard modal',
+        navIds: ['dashboardActionsContainer'],
+        chapter: 'Overview · Dashboard',
+        title: '4. AI comment and actions',
+        lead: 'Generate suggestions after completing a course, then manage your progress.',
         blocks: [
-            { type: 'image', image: { src: 'assets/Manual/Leaderboard.png', alt: 'Leaderboard' } },
-            {
-                type: 'text',
-                paragraphs: [
-                    'A podium display for the top 3 players with colored blocks by rank, then a full ranked list showing player ID, player name, course, assessment type, score, and time of completion. Buttons filter the ranking by course.',
-                ],
-            },
+            imageBlock(manualImage('Modals/Dashboard/AICommentAndActions.png', 'Dashboard AI comment and account actions')),
+            textBlock(
+                'The AI Comment and Suggestions area becomes available after you finish all three assessments for at least one course. Select Generate and allow a few moments for the Gemini-powered analysis to review your finished course assessments, scores, answers, skills, and personality preferences.',
+                'After a comment is generated, you can download it as a PDF or select Re-generate if you would like another analysis or more suggestions. At the bottom of the Dashboard, account actions let you reset your progress or delete your account. These actions affect saved data, so read the confirmation prompt carefully.'
+            ),
+        ],
+    },
+    {
+        navIds: ['processContainer', 'loginProcedureContainer'],
+        chapter: 'Process · Login',
+        title: '1. Login procedure',
+        lead: 'This is the first page you see when you open the website.',
+        blocks: [
+            imageBlock(manualImage('Process/Login/LoginPage.png', 'Game login page')),
+            textBlock(
+                'From the login page, choose how you would like to start. Play as a Guest to explore, or log in with an existing account to continue with your saved profile.'
+            ),
+            imageGroupBlock(
+                manualImage('Process/Login/AccountLogin.png', 'Existing account login form', 'Account login'),
+                manualImage('Process/Login/PlayGuest.png', 'Play as a Guest option', 'Play as a Guest')
+            ),
+            textBlock(
+                'Account login is the best choice when you want to keep and revisit your progress. Enter your account details to sign in. Guest play lets you try the game without an account; guest progress may not persist between visits.'
+            ),
+        ],
+    },
+    {
+        navIds: ['accountSetupContainer'],
+        chapter: 'Process · Login',
+        title: 'Set up your player profile',
+        lead: 'Create your account and complete both parts of Profile Creation.',
+        blocks: [
+            imageBlock(manualImage('Modals/AccountRegistration/AccountRegistration.png', 'Account registration form')),
+            textBlock(
+                'New players can register an account through Account Management. Follow the prompts and keep your account details private. Profile Creation has two parts: Character Creation and Preferences Discovery.'
+            ),
+            imageBlock(manualImage('Modals/ProfileCreation/CharacterCreation.png', 'Character Creation profile form', 'Character Creation')),
+            textBlock('Choose your character details, including a player name and gender.'),
+            imageBlock(manualImage('Modals/ProfileCreation/PreferencesDiscovery.png', 'Preferences Discovery form', 'Preferences Discovery')),
+            textBlock('Select skills and personality preferences that describe you.'),
+            imageBlock(manualImage('Modals/ProfileCreation/CourseSelection.png', 'Course selection options', 'Course Selection')),
+            textBlock(
+                'Choose the courses you want to explore. Your selected courses appear in Dashboard statistics, but you can also explore other available courses in the Hallway. Finish the required profile setup so your assessments and recommendations can be personalized.'
+            ),
+        ],
+    },
+    {
+        navIds: ['logoutProcedureContainer'],
+        chapter: 'Process · Logout',
+        title: '2. Log out when you are finished',
+        lead: 'You can log out from either the game settings or Dashboard.',
+        blocks: [
+            imageGroupBlock(
+                manualImage('Process/Logout/SettingsLogout.png', 'Logout option in game settings', 'Settings logout'),
+                manualImage('Process/Logout/DashboardLogout.png', 'Logout option in the Dashboard', 'Dashboard logout')
+            ),
+            textBlock(
+                'Choose the Settings logout option while you are in the game, or use the logout option in the Dashboard. Logging out ends your current session. On a shared device, remember to log out before you leave.'
+            ),
+        ],
+    },
+    {
+        navIds: ['assessmentContainer'],
+        chapter: 'Process · Assessment',
+        title: '3. Complete an assessment',
+        lead: 'Choose an assessment, answer each question, and review your results.',
+        blocks: [
+            imageBlock(manualImage('Process/Assessment/AssessmentTypes.png', 'Menu for selecting an assessment type', 'Step 1 · Choose an assessment')),
+            textBlock(
+                'Choose Course-Related, Skill, or Personality for the course you are exploring. Finish the assessment and reach its result screen to save your progress and answers. Complete all three assessment types for each course you want included in AI comments and recommendations. You may also assess courses you did not select during Profile Creation.'
+            ),
+            imageBlock(manualImage('Process/Assessment/AnswerAnimation.png', 'Answer feedback animation in an assessment', 'Step 2 · Watch the answer feedback')),
+            textBlock(
+                'After you select an answer, the game plays a short answer animation. When the answer is revealed, a green answer bubble means your answer was correct; a red bubble means it was incorrect.'
+            ),
+            imageBlock(manualImage('Process/Assessment/ExplanationSources.png', 'Assessment explanation, source, and link', 'Step 3 · Read the explanation and source')),
+            textBlock(
+                'After the answer is revealed, the game shows an explanation, its source, and a link when available. These references are provided to help you check the explanation and may include educational or organization domains such as .edu and .org. Open the source to review its context and details.'
+            ),
+            imageBlock(manualImage('Process/Assessment/AssessmentResult.png', 'Assessment summary and total score', 'Step 4 · Review your result')),
+            textBlock(
+                'The result screen summarizes your questions and answers, the correct answers, explanations, sources, and your total score when the assessment is scored. Review the summary before closing it; completing the assessment records your progress.'
+            ),
+        ],
+    },
+    {
+        navIds: ['recommendationsContainer'],
+        chapter: 'Process · Recommendations',
+        title: '4. Get AI recommendations',
+        lead: 'Finish the assessments for a course before generating its analysis.',
+        blocks: [
+            imageBlock(manualImage('Process/Recommendation/ReadyForEvaluation.png', 'A course at 100 percent and ready for evaluation', 'Step 1 · Finish all three assessments')),
+            textBlock(
+                'When you finish the Course-Related, Skill, and Personality Assessments for a course, its progress reaches 100% and the Dashboard marks it Ready for Evaluation. You can generate an analysis with one completed course; finishing more courses is recommended so you can compare your results across programs.'
+            ),
+            imageBlock(manualImage('Process/Recommendation/AICommentSuggestions.png', 'Dashboard ready to generate AI comments and suggestions', 'Step 2 · Start the analysis')),
+            textBlock(
+                'Open the Dashboard and choose Generate in AI Comment and Suggestions. The button becomes available after at least one course is ready for evaluation.'
+            ),
+            imageBlock(manualImage('Process/Recommendation/AICommentSuggestionsResult.png', 'Generated AI comment and suggestions', 'Step 3 · Review or download the analysis')),
+            textBlock(
+                'The analysis may take a few moments. Once it appears, read the explanation and suggestions. Download the report as a PDF, or choose Re-generate if you want another set of suggestions.'
+            ),
+            imageBlock(manualImage('Process/Recommendation/AICommentRecommendation.png', 'Top course recommendation in the generated analysis', 'Step 4 · Review your top recommendation')),
+            textBlock(
+                'The Top Recommendation section summarizes the course recommendation across your finished courses. It uses the assessment results and scores together with your saved skills and personality preferences.'
+            ),
+            imageBlock(manualImage('Process/Recommendation/CareerReport.png', 'Example career exploration report downloaded as a PDF', 'Step 5 · Example PDF report')),
+            textBlock(
+                'This is an example of the downloaded career exploration report. Keep a copy if you want to revisit your analysis later.'
+            ),
         ],
     },
 ];

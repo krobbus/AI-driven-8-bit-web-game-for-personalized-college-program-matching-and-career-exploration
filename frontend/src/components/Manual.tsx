@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { ModalProps } from '../types/props';
 import {
     manualNav,
@@ -22,7 +22,7 @@ manualPages.forEach((page, index) => {
 
 const Figure: React.FC<{ image: ManualImage }> = ({ image }) => (
     <figure className="figure">
-        <img src={image.src} alt={image.alt} />
+        <img src={image.src} alt={image.alt} draggable={false} />
         {image.caption && <figcaption>{image.caption}</figcaption>}
     </figure>
 );
@@ -58,7 +58,7 @@ const renderBlock = (block: ManualBlock, key: number) => {
                 <div key={key} className={`cardGrid ${block.columns === 1 ? 'single' : ''}`}>
                     {block.cards.map((card, i) => (
                         <div key={i} className="manualCard">
-                            {card.image && <img src={card.image.src} alt={card.image.alt} />}
+                            {card.image && <img src={card.image.src} alt={card.image.alt} draggable={false} />}
                             {card.title && <h3 className="cardTitle">{card.title}</h3>}
                             {card.text?.map((paragraph, j) => <p key={j}>{paragraph}</p>)}
                         </div>
@@ -71,6 +71,8 @@ const renderBlock = (block: ManualBlock, key: number) => {
 const Manual: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     const [pageIndex, setPageIndex] = useState(0);
     const [direction, setDirection] = useState<Direction>('none');
+    const [dragOffset, setDragOffset] = useState(0);
+    const pointerStart = useRef<{ id: number; x: number; y: number; horizontal: boolean } | null>(null);
 
     const goToIndex = (target: number) => {
         const next = Math.min(Math.max(target, 0), lastIndex);
@@ -85,6 +87,46 @@ const Manual: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
         const target = pageIndexByNavId.get(id);
         if (target !== undefined) goToIndex(target);
+    };
+
+    const handlePagePointerDown = (e: React.PointerEvent<HTMLElement>) => {
+        if (!e.isPrimary || (e.pointerType === 'mouse' && e.button !== 0)) return;
+        if ((e.target as HTMLElement).closest('button, a, input, textarea, select')) return;
+
+        pointerStart.current = { id: e.pointerId, x: e.clientX, y: e.clientY, horizontal: false };
+        e.currentTarget.setPointerCapture(e.pointerId);
+    };
+
+    const handlePagePointerMove = (e: React.PointerEvent<HTMLElement>) => {
+        const start = pointerStart.current;
+        if (!start || start.id !== e.pointerId) return;
+
+        const deltaX = e.clientX - start.x;
+        const deltaY = e.clientY - start.y;
+        if (!start.horizontal && Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            start.horizontal = true;
+        }
+
+        if (start.horizontal) {
+            e.preventDefault();
+            setDragOffset(deltaX);
+        }
+    };
+
+    const finishPagePointer = (e: React.PointerEvent<HTMLElement>, turnPage: boolean) => {
+        const start = pointerStart.current;
+        if (!start || start.id !== e.pointerId) return;
+
+        const deltaX = e.clientX - start.x;
+        const shouldTurn = turnPage && start.horizontal
+            && Math.abs(deltaX) > e.currentTarget.clientWidth * 0.18;
+        pointerStart.current = null;
+        setDragOffset(0);
+
+        if (shouldTurn) goToIndex(pageIndex + (deltaX < 0 ? 1 : -1));
+        if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+        }
     };
 
     useEffect(() => {
@@ -144,7 +186,22 @@ const Manual: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                     <button id="closeButton" onClick={onClose}>X</button>
 
                     <section id="manualContainer" className="manualContainer">
-                        <h1 id="mainTitle">PLAYER'S MANUAL</h1>
+                        <div className="manualTitleBar">
+                            <h1 id="mainTitle">PLAYER'S MANUAL</h1>
+                            <div className="pageIndicator">
+                                <span>PAGE {pageIndex + 1} / {totalPages}</span>
+                                <div
+                                    className="pageProgress"
+                                    role="progressbar"
+                                    aria-label="Manual reading progress"
+                                    aria-valuemin={1}
+                                    aria-valuemax={totalPages}
+                                    aria-valuenow={pageIndex + 1}
+                                >
+                                    <span style={{ width: `${((pageIndex + 1) / totalPages) * 100}%` }} />
+                                </div>
+                            </div>
+                        </div>
 
                         <nav>{renderNav(manualNav)}</nav>
 
@@ -152,7 +209,17 @@ const Manual: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                             <div className={`book ${isCover ? 'cover' : ''}`}>
                                 <article
                                     key={pageIndex}
-                                    className={`bookPage ${direction === 'next' ? 'turnNext' : direction === 'prev' ? 'turnPrev' : ''}`}
+                                    className={`bookPage ${direction === 'next' ? 'turnNext' : direction === 'prev' ? 'turnPrev' : ''} ${dragOffset !== 0 ? 'dragging' : ''}`}
+                                    style={{
+                                        transform: dragOffset !== 0
+                                            ? `translateX(${dragOffset}px) rotateY(${Math.max(-12, Math.min(12, dragOffset / 12))}deg)`
+                                            : undefined,
+                                        transition: dragOffset === 0 ? 'transform 240ms ease-out' : 'none',
+                                    }}
+                                    onPointerDown={handlePagePointerDown}
+                                    onPointerMove={handlePagePointerMove}
+                                    onPointerUp={(e) => finishPagePointer(e, true)}
+                                    onPointerCancel={(e) => finishPagePointer(e, false)}
                                 >
                                     <header className="pageHeader">
                                         {page.chapter && <span className="chapterTab">{page.chapter}</span>}
@@ -168,33 +235,6 @@ const Manual: React.FC<ModalProps> = ({ isOpen, onClose }) => {
                                         <button className="bookBtn" onClick={() => goToIndex(1)}>START READING</button>
                                     )}
                                 </article>
-                            </div>
-
-                            <div className="bookControls">
-                                <button
-                                    className="bookBtn"
-                                    onClick={() => goToIndex(pageIndex - 1)}
-                                    disabled={pageIndex === 0}
-                                    aria-label="Previous page"
-                                >
-                                    PREVIOUS
-                                </button>
-
-                                <div className="pageIndicator">
-                                    <span>PAGE {pageIndex + 1} / {totalPages}</span>
-                                    <div className="pageProgress">
-                                        <span style={{ width: `${((pageIndex + 1) / totalPages) * 100}%` }} />
-                                    </div>
-                                </div>
-
-                                <button
-                                    className="bookBtn"
-                                    onClick={() => goToIndex(pageIndex + 1)}
-                                    disabled={pageIndex === lastIndex}
-                                    aria-label="Next page"
-                                >
-                                    NEXT
-                                </button>
                             </div>
                         </div>
                     </section>

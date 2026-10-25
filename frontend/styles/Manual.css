@@ -13,14 +13,49 @@
     overflow: hidden;
     box-sizing: border-box;
 
-    #mainTitle{
-        font-size: 3vmin;
-        text-wrap: wrap;
-        margin: 0;
-        text-align: left;
+    .manualTitleBar{
+        display: flex;
+        justify-content: space-between;
+        align-items: self-start;
+        gap: var(--space-lg);
         width: 100%;
-        max-width: 70vmin;
-        user-select: none;
+        min-width: 0;
+
+        #mainTitle{
+            flex: 0 1 auto;
+            font-size: 3vmin;
+            text-wrap: wrap;
+            margin: 0;
+            text-align: left;
+            max-width: 70vmin;
+            user-select: none;
+        }
+
+        .pageIndicator{
+            display: flex;
+            flex: 0 1 32vmin;
+            align-items: center;
+            gap: var(--space-md);
+            font-size: 1.4vmin;
+            margin-right: 10vmin;
+            white-space: nowrap;
+
+            .pageProgress{
+                flex: 1;
+                min-width: 8vmin;
+                height: 1vmin;
+                background-color: rgba(0, 0, 0, 0.4);
+                border: 0.3vmin solid var(--color-green-light);
+                box-sizing: border-box;
+
+                span{
+                    display: block;
+                    height: 100%;
+                    background-color: var(--color-green-light);
+                    transition: width 0.4s ease-in-out;
+                }
+            }
+        }
     }
 
     /* ---------- navigation ---------- */
@@ -230,7 +265,15 @@
         font-size: 2vmin;
         line-height: 1.5;
         letter-spacing: 0;
+        touch-action: pan-y;
+        cursor: grab;
         box-sizing: border-box;
+
+        &.dragging{
+            cursor: grabbing;
+            box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.28);
+            user-select: none;
+        }
 
         &.turnNext{
             transform-origin: left center;
@@ -278,6 +321,11 @@
             gap: var(--space-lg);
         }
 
+        img{
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
         .textBlock{
             display: flex;
             flex-direction: column;
@@ -298,7 +346,6 @@
 
             img{
                 width: 100%;
-                max-width: 78vmin;
                 height: auto;
                 border: 0.4vmin solid var(--ink);
                 box-sizing: border-box;
@@ -332,6 +379,7 @@
 
             li{
                 position: relative;
+                text-align: left;
                 padding-left: 3.4vmin;
 
                 &::before{                              /* pixel checkbox */
@@ -388,39 +436,6 @@
         }
     }
 
-    /* ---------- controls ---------- */
-    .bookControls{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: var(--space-lg);
-
-        .pageIndicator{
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-sm);
-            font-size: 1.4vmin;
-
-            .pageProgress{
-                width: 80%;
-                height: 1vmin;
-                background-color: rgba(0, 0, 0, 0.4);
-                border: 0.3vmin solid var(--color-green-light);
-                box-sizing: border-box;
-
-                span{
-                    display: block;
-                    height: 100%;
-                    background-color: var(--color-green-light);
-                    transition: width 0.4s ease-in-out;
-                }
-            }
-        }
-    }
-
     .bookBtn{
         font-family: "Jersey 10";
         font-size: 2.3vmin;
@@ -437,6 +452,23 @@
             color: #fff;
             background-color: var(--color-green-light);
             border: 0.5vmin solid #fff;
+        }
+
+        @media (max-width: 700px){
+            .manualContainer{
+                .manualTitleBar{
+                    align-items: flex-start;
+                    flex-direction: column;
+                    gap: var(--space-sm);
+
+                    #mainTitle{ max-width: 100%; }
+
+                    .pageIndicator{
+                        flex: 0 1 auto;
+                        width: 100%;
+                    }
+                }
+            }
         }
 
         &:disabled{
